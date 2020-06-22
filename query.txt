@@ -1,6 +1,9 @@
 
 CREATE CONSTRAINT ON (provincia:Provincia) ASSERT provincia.name IS UNIQUE
 CREATE CONSTRAINT ON (regione:Regione) ASSERT regione.name IS UNIQUE
+CREATE CONSTRAINT ON (data:Data) ASSERT data.value IS UNIQUE
+CREATE CONSTRAINT ON (positivi:Positivi) ASSERT positivi.value IS UNIQUE
+
 
 CALL apoc.load.json("file:///regioni.json") YIELD value AS v
 MERGE (r:Regione {name: v.name})
@@ -21,9 +24,34 @@ RETURN *
 
 CALL apoc.load.json("file:///province.json") YIELD value AS v
 MATCH (provincia:Provincia {name:v.name}),(regione:Regione {name:v.regione})
-CREATE (provincia)-[:PROVINCIA_DI]->(regione)
+MERGE (provincia)-[:PROVINCIA_DI]->(regione)
 RETURN *
 
 MATCH (n)
 DETACH DELETE n //per eliminare tutti i nodi
 
+LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-province.csv" AS csvLine
+MATCH (provincia:Provincia { name: csvLine.denominazione_provincia })
+SET provincia.sigla = csvLine.sigla_provincia,provincia.latidudine = csvLine.lat,provincia.longitudine = csvLine.long
+RETURN *
+
+
+LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-province.csv" AS csvLine 
+MERGE (data:Data {value: csvLine.data })
+
+LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-province.csv" AS csvLine 
+MERGE (positivi:Positivi {value: toInteger(csvLine.totale_casi)})
+
+
+LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-province.csv" AS csvLine
+MATCH (provincia:Provincia {name: csvLine.denominazione_provincia}),(positivi:Positivi {value: toInteger(csvLine.totale_casi)})
+MERGE (provincia)-[:POSSIEDE]->(positivi)
+RETURN *
+
+LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-province.csv" AS csvLine
+MATCH (data:Data {value:csvLine.data}),(positivi:Positivi {value: toInteger(csvLine.totale_casi)})
+MERGE (positivi)-[:NEL_GIORNO]->(data)
+RETURN *
+
+
+MATCH p=()-[r:POSSIEDE]->() DELETE r // eliminare relationship
