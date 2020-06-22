@@ -1,3 +1,7 @@
+
+CREATE CONSTRAINT ON (provincia:Provincia) ASSERT provincia.name IS UNIQUE
+CREATE CONSTRAINT ON (regione:Regione) ASSERT regione.name IS UNIQUE
+
 CALL apoc.load.json("file:///regioni.json") YIELD value AS v
 MERGE (r:Regione {name: v.name})
 FOREACH (n IN v.neighbors |
@@ -6,10 +10,6 @@ FOREACH (n IN v.neighbors |
 )
 RETURN *
 
-MATCH (n)
-DETACH DELETE n
-
-CREATE CONSTRAINT ON (provincia:Provincia) ASSERT provincia.name IS UNIQUE
 
 CALL apoc.load.json("file:///province.json") YIELD value AS v
 MERGE (provincia:Provincia {name: v.name})
@@ -23,3 +23,7 @@ CALL apoc.load.json("file:///province.json") YIELD value AS v
 MATCH (provincia:Provincia {name:v.name}),(regione:Regione {name:v.regione})
 CREATE (provincia)-[:PROVINCIA_DI]->(regione)
 RETURN *
+
+MATCH (n)
+DETACH DELETE n //per eliminare tutti i nodi
+
