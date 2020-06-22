@@ -1,0 +1,21 @@
+CALL apoc.load.json("file:///regioni.json") YIELD value AS v
+MERGE (r:Regione {name: v.name})
+FOREACH (n IN v.neighbors |
+  MERGE (neighbor:Regione {name: n})
+  MERGE (r)-[:CONFINA_CON]-(neighbor)
+)
+RETURN *
+
+MATCH (n)
+DETACH DELETE n
+
+CREATE CONSTRAINT ON (provincia:Provincia) ASSERT provincia.name IS UNIQUE
+
+CALL apoc.load.json("file:///province.json") YIELD value AS v
+MERGE (provincia:Provincia {name: v.name})
+FOREACH (n IN v.neighbors |
+  MERGE (neighbor:Provincia {name: n})
+  MERGE (provincia)-[:CONFINA_CON]-(neighbor)
+)
+MERGE (provincia)-[:PROVINCIA_DI]->(regione:Regione {v.regione })
+RETURN *

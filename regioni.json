@@ -1,0 +1,82 @@
+[
+  {
+    "name": "Lazio",
+    "neighbors": ["Campania", "Abruzzo", "Marche", "Molise","Toscana", "Umbria"]
+  },
+  {
+    "name": "Campania",
+    "neighbors": ["Basilicata", "Molise", "Puglia","Lazio"]
+  },
+  {
+    "name": "Abruzzo",
+    "neighbors": ["Marche", "Molise","Lazio"]
+  },
+  {
+    "name": "Marche",
+    "neighbors": ["Emilia-Romagna","Toscana", "Umbria","Lazio","Abruzzo"]
+  },
+  {
+    "name": "Molise",
+    "neighbors": ["Puglia","Abruzzo","Lazio","Campania"]
+  },
+  {
+    "name": "Toscana",
+    "neighbors": ["Emilia-Romagna", "Liguria", "Umbria","Lazio","Marche"]
+  },
+  {
+    "name": "Umbria",
+    "neighbors": ["Lazio","Marche","Toscana"]
+  },
+  {
+    "name": "Basilicata",
+    "neighbors": ["Calabria","Puglia","Campania"]
+  },
+  {
+    "name": "Puglia",
+    "neighbors": ["Campania","Basilicata","Molise"]
+  },
+  {
+    "name": "Emilia-Romagna",
+    "neighbors": ["Liguria", "Lombardia","Marche", "Piemonte", "Veneto","Toscana"]
+  },
+  {
+    "name": "Liguria",
+    "neighbors": ["Piemonte", "Toscana", "Emilia-Romagna"]
+  },
+  {
+    "name": "Calabria",
+    "neighbors": ["Basilicata"]
+  },
+  {
+    "name": "Lombardia",
+    "neighbors": ["Piemonte", "Trentino-Alto Adige", "Veneto","Emilia-Romagna"]
+  },
+  {
+    "name": "Piemonte",
+    "neighbors": ["Valle d'Aosta","Lombardia","Emilia-Romagna", "Liguria"]
+  },
+  {
+    "name": "Veneto",
+    "neighbors": ["Friuli Venezia Giulia","Trentino-Alto Adige","Emilia-Romagna","Lombardia"]
+  },
+  {
+    "name": "Trentino-Alto Adige",
+    "neighbors": ["Lombardia","Veneto"]
+  },
+  {
+    "name": "Valle d'Aosta",
+    "neighbors": ["Piemonte"]
+  },
+  {
+    "name": "Friuli Venezia Giulia",
+    "neighbors": ["Veneto"]
+  },
+  {
+    "name": "Sicilia",
+    "neighbors": []
+  },
+  {
+    "name": "Sardegna",
+    "neighbors": []
+  }
+]

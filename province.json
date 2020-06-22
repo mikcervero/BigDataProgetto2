@@ -1,0 +1,527 @@
+[
+	{
+	"name": "Chieti",
+	"neighbors": ["Pescara","L'Aquila","Isernia","Campobasso"],
+    "regione": "Abruzzo"
+	},
+	{
+	"name": "Pescara",
+	"neighbors": ["Teramo","L'Aquila","Chieti"],
+    "regione": "Abruzzo"
+	},
+	{
+	"name": "Teramo",
+	"neighbors": ["Ascoli Piceno","Rieti","L'Aquila","Pescara"],
+    "regione": "Abruzzo"
+	},
+	{
+	"name": "L'Aquila",
+	"neighbors": ["Teramo","Pescara","Chieti","Isernia","Frosinone","Roma","Rieti"],
+    "regione": "Abruzzo"
+	},
+	{
+	"name": "Roma",
+	"neighbors": ["Rieti","L'Aquila","Frosinone","Latina","Viterbo"],
+    "regione": "Lazio"
+	},
+	{
+	"name": "Rieti",
+	"neighbors": ["Teramo","L'Aquila","Ascoli Piceno","Perugia","Terni","Viterbo","Roma"],
+    "regione": "Lazio"
+	},
+	{
+	"name": "Viterbo",
+	"neighbors": ["Terni","Siena","Grosseto","Rieti","Roma"],
+    "regione": "Lazio"
+	},
+	{
+	"name": "Frosinone",
+	"neighbors": ["L'Aquila","Roma","Latina","Isernia","Caserta"],
+    "regione": "Lazio"
+	},
+	{
+	"name": "Latina",
+	"neighbors": ["Roma","Frosinone","Caserta"],
+    "regione": "Lazio"
+	},
+	{
+	"name": "Trapani",
+	"neighbors": ["Palermo","Agrigento"],
+    "regione": "Sicilia"
+	},
+	{
+	"name": "Palermo",
+	"neighbors": ["Trapani","Agrigento","Caltanissetta","Enna","Messina"],
+    "regione": "Sicilia"
+	},
+	{
+	"name": "Agrigento",
+	"neighbors": ["Trapani","Palermo","Caltanissetta"],
+    "regione": "Sicilia"
+	},
+	{
+	"name": "Caltanissetta",
+	"neighbors": ["Palermo","Agrigento","Enna","Catania","Ragusa"],
+    "regione": "Sicilia"
+	},
+	{
+	"name": "Messina",
+	"neighbors": ["Palermo","Enna","Catania"],
+    "regione": "Sicilia"
+	},
+	{
+	"name": "Catania",
+	"neighbors": ["Messina","Enna","Ragusa","Siracusa"],
+    "regione": "Sicilia"
+	},
+	{
+	"name": "Enna",
+	"neighbors": ["Palermo","Messina","Caltanissetta","Catania"],
+    "regione": "Sicilia"
+	},
+	{
+	"name": "Ragusa",
+	"neighbors": ["Caltanissetta","Catania","Siracusa"],
+    "regione": "Sicilia"
+	},
+	{
+	"name": "Siracusa",
+	"neighbors": ["Catania","Ragusa"],
+    "regione": "Sicilia"
+	},
+	{
+	"name": "Sassari",
+	"neighbors": ["Oristano","Nuoro"],
+    "regione": "Sardegna"
+	},
+	{
+	"name": "Oristano",
+	"neighbors": ["Sassari","Nuoro","Sud Sardegna"],
+    "regione": "Sardegna"
+	},
+	{
+	"name": "Nuoro",
+	"neighbors": ["Sassari","Oristano","Sud Sardegna"],
+    "regione": "Sardegna"
+	},
+	{
+	"name": "Sud Sardegna",
+    "neighbors": ["Oristano","Nuoro","Cagliari"],
+    "regione": "Sardegna"
+	},
+	{
+	"name": "Cagliari",
+	"neighbors": ["Sud Sardegna"],
+    "regione": "Sardegna"
+	},
+	{
+	"name": "Isernia",
+	"neighbors": ["L'Aquila","Chieti","Campobasso","Frosinone","Caserta"],
+    "regione": "Molise"
+	},
+	{
+	"name": "Campobasso",
+	"neighbors": ["Chieti","Isernia","Caserta","Benevento","Foggia"],
+    "regione": "Molise"
+	},
+	{
+	"name": "Caserta",
+	"neighbors": ["Latina","Frosinone","Isernia","Campobasso","Benevento","Napoli"],
+    "regione": "Campania"
+	},
+	{
+	"name": "Napoli",
+	"neighbors": ["Caserta","Benevento","Avellino","Salerno"],
+    "regione": "Campania"
+	},
+	{
+	"name": "Avellino",
+	"neighbors": ["Benevento","Foggia","Napoli","Salerno","Potenza"],
+    "regione": "Campania"
+	},
+	{
+	"name": "Salerno",
+	"neighbors": ["Napoli","Avellino","Potenza"],
+    "regione": "Campania"
+	},
+	{
+	"name": "Foggia",
+	"neighbors": ["Campobasso","Benevento","Avellino","Potenza","Barletta-Andria Trani"],
+    "regione": "Puglia"
+	},
+	{
+	"name": "Barletta-Andria Trani",
+	"neighbors": ["Foggia","Potenza","Bari"],
+    "regione": "Puglia"
+	},
+	{
+	"name": "Bari",
+	"neighbors": ["Barletta-Andria Trani","Potenza","Matera","Taranto","Brindisi"],
+    "regione": "Puglia"
+	},
+	{
+	"name": "Taranto",
+	"neighbors": ["Bari","Matera","Brindisi","Lecce"],
+    "regione": "Puglia"
+	},
+	{
+	"name": "Brindisi",
+	"neighbors": ["Bari","Taranto","Lecce"],
+    "regione": "Puglia"
+	},
+	{
+	"name": "Lecce",
+	"neighbors": ["Taranto","Brindisi"],
+    "regione": "Puglia"
+	},
+	{
+	"name": "Potenza",
+	"neighbors": ["Salerno","Avellino","Foggia","Barletta-Andria","Bari","Matera","Cosenza"],
+    "regione": "Basilicata"
+	},
+	{
+	"name": "Matera",
+	"neighbors": ["Potenza","Bari","Taranto","Cosenza"],
+    "regione": "Basilicata"
+	},
+	{
+	"name": "Cosenza",
+	"neighbors": ["Potenza","Matera","Catanzaro","Crotone"],
+    "regione": "Calabria"
+	},
+	{
+	"name": "Catanzaro",
+	"neighbors": ["Cosenza","Crotone","Vibo Valentia","Reggio Calabria"],
+    "regione": "Calabria"
+	},
+	{
+	"name": "Crotone",
+	"neighbors": ["Cosenza","Catanzaro"],
+    "regione": "Calabria"
+	},
+	{
+	"name": "Vibo Valentia",
+	"neighbors": ["Catanzaro", "Reggio Calabria"],
+    "regione": "Calabria"
+	},
+	{
+	"name": "Reggio Calabria",
+	"neighbors": ["Vibo Valentia","Catanzaro"],
+    "regione": "Calabria"
+	},
+	{
+	"name": "Terni",
+	"neighbors": ["Viterbo","Rieti","Perugia","Siena"],
+    "regione": "Umbria"
+	},
+	{
+	"name": "Perugia",
+	"neighbors": ["Arezzo","Siena","Terni","Rieti","Ascoli Piceno","Macerata","Ancona","Pesaro-Urbino"],
+    "regione": "Umbria"
+	},
+	{
+	"name": "Ascoli Piceno",
+	"neighbors": ["Rieti","Teramo","Perugia","Fermo"],
+    "regione": "Marche"
+	},
+	{
+	"name": "Fermo",
+	"neighbors": ["Macerata","Ascoli Piceno"],
+    "regione": "Marche"
+	},
+	{
+	"name": "Macerata",
+	"neighbors": ["Perugia","Fermo","Ancona"],
+    "regione": "Marche"
+	},
+	{
+	"name": "Ancona",
+	"neighbors": ["Perugia","Macerata","Pesaro-Urbino"],
+    "regione": "Marche"
+	},
+	{
+	"name": "Pesaro-Urbino",
+	"neighbors": ["Perugia","Arezzo","Ancona","Rimini"],
+    "regione": "Marche"
+	},
+	{
+	"name": "Grosseto",
+	"neighbors": ["Viterbo","Siena","Pisa","Livorno"],
+    "regione": "Toscana"
+	},
+	{
+	"name": "Livorno",
+	"neighbors": ["Pisa","Grosseto"],
+    "regione": "Toscana"
+	},
+	{
+	"name": "Siena",
+	"neighbors": ["Grosseto","Viterbo","Terni","Perugia","Arezzo","Firenze","Pisa"],
+    "regione": "Toscana"
+	},
+	{
+	"name": "Arezzo",
+	"neighbors": ["Siena","Perugia","Pesaro-Urbino","Rimini","Forlì-Cesena","Firenze"],
+    "regione": "Toscana"
+	},
+	{
+	"name": "Firenze",
+	"neighbors": ["Pisa","Siena","Arezzo","Forlì-Cesena","Ravenna","Bologna","Prato","Pistoia","Lucca"],
+    "regione": "Toscana"
+	},
+	{
+	"name": "Pisa",
+	"neighbors": ["Livorno","Grosseto","Siena","Firenze","Pistoia","Lucca"],
+    "regione": "Toscana"
+	},
+	{
+	"name": "Prato",
+	"neighbors": ["Firenze","Pistoia","Bologna"],
+    "regione": "Toscana"
+	},
+	{
+	"name": "Pistoia",
+	"neighbors": ["Prato","Firenze","Lucca","Bologna","Modena"],
+    "regione": "Toscana"
+	},
+	{
+	"name": "Lucca",
+	"neighbors": ["Pisa","Pistoia","Modena","Reggio Emilia","Massa-Carrara"],
+    "regione": "Toscana"
+	},
+	{
+	"name": "Massa-Carrara",
+	"neighbors": ["Lucca","Reggio Emilia","Parma","La Spezia"],
+    "regione": "Toscana"
+	},
+	{
+	"name": "Rimini",
+	"neighbors": ["Pesaro-Urbino","Arezzo","Forlì-Cesena"],
+    "regione": "Emilia-Romagna"
+	},
+	{
+	"name": "Forlì-Cesena",
+	"neighbors": ["Rimini","Arezzo","Firenze","Ravenna"],
+    "regione": "Emilia-Romagna"
+	},
+	{
+	"name": "Ravenna",
+	"neighbors": ["Forlì-Cesena","Firenze","Bologna","Ferrara"],
+    "regione": "Emilia-Romagna"
+	},
+	{
+	"name": "Ferrara",
+	"neighbors": ["Ravenna","Bologna","Rovigo","Mantova","Modena"],
+    "regione": "Emilia-Romagna"
+	},
+	{
+	"name": "Bologna",
+	"neighbors": ["Ravenna","Ferrara","Modena","Pistoia","Prato","Firenze"],
+    "regione": "Emilia-Romagna"
+	},
+	{
+	"name": "Modena",
+	"neighbors": ["Bologna","Ferrara","Pistoia","Lucca","Reggio Emilia","Mantova"],
+    "regione": "Emilia-Romagna"
+	},
+	{
+	"name": "Reggio Emilia",
+	"neighbors": ["Modena","Lucca","Massa-Carrara","Parma","Mantova"],
+    "regione": "Emilia-Romagna"
+	},
+	{
+	"name": "Parma",
+	"neighbors": ["Massa-Carrara","La Spezia","Genova","Piacenza","Cremona","Mantova","Reggio Emilia"],
+    "regione": "Emilia-Romagna"
+	},
+	{
+	"name": "Piacenza",
+	"neighbors": ["Parma","Genova","Pavia","Lodi","Cremona","Alessandria"],
+    "regione": "Emilia-Romagna"
+	},
+	{
+	"name": "La Spezia",
+	"neighbors": ["Massa-Carrara","Parma","Genova"],
+    "regione": "Liguria"
+	},
+	{
+	"name": "Genova",
+	"neighbors": ["La Spezia","Parma","Piacenza","Alessandria","Savona"],
+    "regione": "Liguria"
+	},
+	{
+	"name": "Savona",
+	"neighbors": ["Genova","Alessandria","Asti","Cuneo","Imperia"],
+    "regione": "Liguria"
+	},
+	{
+	"name": "Imperia",
+	"neighbors": ["Savona","Cuneo"],
+    "regione": "Liguria"
+	},
+	{
+	"name": "Rovigo",
+	"neighbors": ["Ferrara","Mantova","Verona","Padova","Venezia"],
+    "regione": "Veneto"
+	},
+	{
+	"name": "Padova",
+	"neighbors": ["Rovigo","Venezia","Treviso","Vicenza","Verona"],
+    "regione": "Veneto"
+	},
+	{
+	"name": "Venezia",
+	"neighbors": ["Rovigo","Padova","Treviso","Pordenone","Udine"],
+    "regione": "Veneto"
+	},
+	{
+	"name": "Treviso",
+	"neighbors": ["Venezia","Padova","Pordenone","Belluno","Vicenza"],
+    "regione": "Veneto"
+	},
+	{
+	"name": "Belluno",
+	"neighbors": ["Pordenone","Udine","Bolzano","Trento","Vicenza","Treviso"],
+    "regione": "Veneto"
+	},
+	{
+	"name": "Vicenza",
+	"neighbors": ["Treviso","Padova","Belluno","Verona","Trento"],
+    "regione": "Veneto"
+	},
+	{
+	"name": "Verona",
+	"neighbors": ["Vicenza","Padova","Rovigo","Mantova","Brescia","Trento"],
+    "regione": "Veneto"
+	},
+	{
+	"name": "Pordenone",
+	"neighbors": ["Belluno","Treviso","Venezia","Udine"],
+    "regione": "Friuli-Venezia Giulia"
+	},
+	{
+	"name": "Udine",
+	"neighbors": ["Pordenone","Belluno","Venezia","Gorizia"],
+    "regione": "Friuli-Venezia Giulia"
+	},
+	{
+	"name": "Gorizia",
+	"neighbors": ["Udine","Trieste"],
+    "regione": "Friuli-Venezia Giulia"
+	},
+	{
+	"name": "Trieste",
+	"neighbors": ["Gorizia"],
+    "regione": "Friuli-Venezia Giulia"
+	},
+	{
+	"name": "Trento",
+	"neighbors": ["Belluno","Vicenza","Verona","Brescia","Sondrio","Bolzano"],
+    "regione": "Trentino-Alto Adige"
+    
+	},
+	{
+	"name": "Bolzano",
+	"neighbors": ["Sondrio","Trento","Belluno"],
+    "regione": "Trentino-Alto Adige"
+	},
+	{
+	"name": "Mantova",
+	"neighbors": ["Verona","Rovigo","Ferrara","Modena","Reggio Emilia","Parma","Cremona","Brescia"],
+    "regione": "Lombardia"
+	},
+	{
+	"name": "Cremona",
+	"neighbors": ["Mantova","Parma","Piacenza","Lodi","Bergamo","Brescia","Milano"],
+    "regione": "Lombardia"
+	},
+	{
+	"name": "Brescia",
+	"neighbors": ["Mantova","Verona","Trento","Sondrio","Bergamo","Cremona"],
+    "regione": "Lombardia"
+	},
+	{
+	"name": "Bergamo",
+	"neighbors": ["Sondrio","Brescia","Cremona","Milano","Lecco","Monza Brianza"],
+    "regione": "Lombardia"
+	},
+	{
+	"name": "Sondrio",
+	"neighbors": ["Bolzano","Trento","Brescia","Bergamo","Lecco","Como"],
+    "regione": "Lombardia"
+	},
+	{
+	"name": "Lecco",
+	"neighbors": ["Bergamo","Sondrio","Como","Monza Brianza"],
+    "regione": "Lombardia"
+	},
+	{
+	"name": "Como",
+	"neighbors": ["Sondrio","Lecco","Monza Brianza","Varese"],
+    "regione": "Lombardia"
+	},
+	{
+	"name": "Monza Brianza",
+	"neighbors": ["Lecco","Como","Bergamo","Milano","Varese"]
+	},
+	{
+	"name": "Milano",
+	"neighbors": ["Lodi","Pavia","Novara","Varese","Monza Brianza","Bergamo","Cremona"],
+    "regione": "Lombardia"
+	},
+	{
+	"name": "Varese",
+	"neighbors": ["Como","Monza Brianza","Milano","Novara","Verbano-Cusio-Ossola"],
+    "regione": "Lombardia"
+	},
+	{
+	"name": "Pavia",
+	"neighbors": ["Piacenza","Lodi","Milano","Novara","Vercelli","Alessandria"],
+    "regione": "Lombardia"
+	},
+	{
+	"name": "Alessandria",
+	"neighbors": ["Pavia","Piacenza","Genova","Savona","Asti","Vercelli"],
+    "regione": "Piemonte"
+	},
+	{
+	"name": "Asti",
+	"neighbors": ["Alessandria","Savona","Cuneo","Torino"],
+    "regione": "Piemonte"
+	},
+	{
+	"name": "Cuneo",
+	"neighbors": ["Imperia","Savona","Asti","Torino"],
+    "regione": "Piemonte"
+	},
+	{
+	"name": "Torino",
+	"neighbors": ["Cuneo","Asti","Vercelli","Biella","Aosta"],
+    "regione": "Piemonte"
+	},
+	{
+	"name": "Vercelli",
+	"neighbors": ["Torino","Alessandria","Pavia","Novara","Biella","Aosta"],
+    "regione": "Piemonte"
+	},
+	{
+	"name": "Novara",
+	"neighbors": ["Pavia","Milano","Varese","Verbano-Cusio-Ossola","Vercelli"],
+    "regione": "Piemonte"
+	},
+	{
+	"name": "Verbano-Cusio-Ossola",
+	"neighbors": ["Vercelli","Novara","Varese"],
+    "regione": "Piemonte"
+	},
+	{
+	"name": "Biella",
+	"neighbors": ["Torino","Vercelli","Aosta"],
+    "regione": "Piemonte"
+	},
+	{
+	"name": "Aosta",
+	"neighbors": ["Vercelli","Biella","Torino"],
+    "regione": "Valle d'Aosta"
+	}
+]

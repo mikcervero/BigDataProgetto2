@@ -1,0 +1,65 @@
+regione;confinante
+Lazio;Campania
+Lazio;Abruzzo
+Lazio;Marche
+Lazio;Molise
+Lazio;Toscana
+Lazio;Umbria
+Campania;Basilicata
+Campania;Lazio
+Campania;Molise
+Campania;Puglia
+Abruzzo;Marche
+Abruzzo;Molise
+Abruzzo;Lazio
+Marche;Abruzzo
+Marche;Lazio
+Marche;Emilia-Romagna
+Marche;Toscana
+Marche;Umbria
+Molise;Abruzzo
+Molise;Lazio
+Molise;Campania
+Molise;Puglia
+Toscana;Lazio
+Toscana;Emilia-Romagna
+Toscana;Liguria
+Toscana;Umbria
+Toscana;Marche
+Umbria;Lazio
+Umbria;Marche
+Umbria;Toscana
+Basilicata;Calabria
+Basilicata;Campania
+Basilicata;Puglia
+Puglia;Basilicata
+Puglia;Campania
+Puglia;Molise
+Emilia-Romagna;Liguria 
+Emilia-Romagna;Lombardia
+Emilia-Romagna;Marche
+Emilia-Romagna;Piemonte
+Emilia-Romagna;Toscana
+Emilia-Romagna;Veneto
+Liguria;Emilia-Romagna
+Liguria;Toscana
+Liguria;Piemonte
+Calabria;Basilicata
+Lombardia;Piemonte
+Lombardia;Emilia-Romagna
+Lombardia;Trentino-Alto Adige
+Lombardia;Veneto
+Piemonte;Lombardia
+Piemonte;Emilia-Romagna
+Piemonte;Valle d'Aosta
+Piemonte;Liguria
+Veneto;Emilia-Romagna
+Veneto;Friuli Venezia Giulia
+Veneto;Lombardia
+Veneto;Trentino-Alto Adige
+Trentino-Alto Adige;Lombardia
+Trentino-Alto Adige;Veneto
+Valle d'Aosta;Piemonte
+Friuli Venezia Giulia;Veneto
+Sardegna ;
+Sicilia;
