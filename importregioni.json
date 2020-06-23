@@ -1,0 +1,36 @@
+{
+  "config": {
+    "log": "debug"
+  },
+  "source" : {
+    "file": { "path": "/home/fabiano/regioni.json" }
+  },
+  "extractor" : {
+    "json": {}
+  },
+  "transformers" : [
+    { "merge": { "joinFieldName": "name", "lookup": "Regione.name" } },
+    { "vertex": { "class": "Regione"} },
+    { "edge": {
+      "class": "Confina",
+      "joinFieldName": "neighbors",
+      "lookup": "Regione.name",
+      "unresolvedLinkAction": "CREATE"
+    } }
+  ],
+  "loader" : {
+    "orientdb": {
+      "dbURL": "plocal:/home/fabiano/orientdb-3.1.0/databases/BigData",
+      "dbUser": "admin",
+      "dbPassword": "admin",
+      "dbAutoDropIfExists": false,
+      "dbAutoCreate": true,
+      "standardElementConstraints": false,
+      "tx": false,
+      "wal": false,
+      "batchCommit": 1000,
+      "dbType": "graph",
+      "classes": [{"name": "Regione", "extends":"V"}, {"name": "Confina", "extends":"E"}]
+    }
+  }
+}
