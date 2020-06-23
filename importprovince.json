@@ -1,0 +1,42 @@
+{
+  "config": {
+    "log": "debug"
+  },
+  "source" : {
+    "file": { "path": "/home/fabiano/province.json" }
+  },
+  "extractor" : {
+    "json": {}
+  },
+  "transformers" : [
+    { "merge": { "joinFieldName": "name", "lookup": "Provincia.name" } },
+    { "vertex": { "class": "Provincia"} },
+    { "edge": {
+      "class": "Confina",
+      "joinFieldName": "neighbors",
+      "lookup": "Provincia.name",
+      "unresolvedLinkAction": "CREATE"
+    } },
+  { "edge": {
+      "class": "ProvinciaDi",
+      "joinFieldName": "regione",
+      "lookup": "Regione.name",
+      "unresolvedLinkAction": "CREATE"
+    } }
+  ],
+  "loader" : {
+    "orientdb": {
+      "dbURL": "plocal:/home/fabiano/orientdb-3.1.0/databases/BigData",
+      "dbUser": "admin",
+      "dbPassword": "admin",
+      "dbAutoDropIfExists": false,
+      "dbAutoCreate": true,
+      "standardElementConstraints": false,
+      "tx": false,
+      "wal": false,
+      "batchCommit": 1000,
+      "dbType": "graph",
+      "classes": [{"name": "Regione", "extends":"V"}, {"name": "Provincia", "extends":"V"}, {"name": "Confina", "extends":"E"}, {"name": "ProvinciaDi", "extends":"E"}]
+    }
+  }
+}
