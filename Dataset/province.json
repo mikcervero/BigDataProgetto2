@@ -176,7 +176,7 @@
 	},
 	{
 	"name": "Potenza",
-	"neighbors": ["Salerno","Avellino","Foggia","Barletta-Andria","Bari","Matera","Cosenza"],
+	"neighbors": ["Salerno","Avellino","Foggia","Barletta-Andria-Trani","Bari","Matera","Cosenza"],
     "regione": "Basilicata"
 	},
 	{
@@ -286,12 +286,12 @@
 	},
 	{
 	"name": "Lucca",
-	"neighbors": ["Pisa","Pistoia","Modena","Reggio Emilia","Massa Carrara"],
+	"neighbors": ["Pisa","Pistoia","Modena","Reggio nell'Emilia","Massa Carrara"],
     "regione": "Toscana"
 	},
 	{
 	"name": "Massa Carrara",
-	"neighbors": ["Lucca","Reggio Emilia","Parma","La Spezia"],
+	"neighbors": ["Lucca","Reggio nell'Emilia","Parma","La Spezia"],
     "regione": "Toscana"
 	},
 	{
@@ -321,17 +321,17 @@
 	},
 	{
 	"name": "Modena",
-	"neighbors": ["Bologna","Ferrara","Pistoia","Lucca","Reggio Emilia","Mantova"],
+	"neighbors": ["Bologna","Ferrara","Pistoia","Lucca","Reggio nell'Emilia","Mantova"],
     "regione": "Emilia-Romagna"
 	},
 	{
-	"name": "Reggio Emilia",
+	"name": "Reggio nell'Emilia",
 	"neighbors": ["Modena","Lucca","Massa Carrara","Parma","Mantova"],
     "regione": "Emilia-Romagna"
 	},
 	{
 	"name": "Parma",
-	"neighbors": ["Massa Carrara","La Spezia","Genova","Piacenza","Cremona","Mantova","Reggio Emilia"],
+	"neighbors": ["Massa Carrara","La Spezia","Genova","Piacenza","Cremona","Mantova","Reggio nell'Emilia"],
     "regione": "Emilia-Romagna"
 	},
 	{
@@ -427,7 +427,7 @@
 	},
 	{
 	"name": "Mantova",
-	"neighbors": ["Verona","Rovigo","Ferrara","Modena","Reggio Emilia","Parma","Cremona","Brescia"],
+	"neighbors": ["Verona","Rovigo","Ferrara","Modena","Reggio nell'Emilia","Parma","Cremona","Brescia"],
     "regione": "Lombardia"
 	},
 	{
