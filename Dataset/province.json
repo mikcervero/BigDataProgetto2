@@ -146,17 +146,17 @@
 	},
 	{
 	"name": "Foggia",
-	"neighbors": ["Campobasso","Benevento","Avellino","Potenza","Barletta-Andria Trani"],
+	"neighbors": ["Campobasso","Benevento","Avellino","Potenza","Barletta-Andria-Trani"],
     "regione": "Puglia"
 	},
 	{
-	"name": "Barletta-Andria Trani",
+	"name": "Barletta-Andria-Trani",
 	"neighbors": ["Foggia","Potenza","Bari"],
     "regione": "Puglia"
 	},
 	{
 	"name": "Bari",
-	"neighbors": ["Barletta-Andria Trani","Potenza","Matera","Taranto","Brindisi"],
+	"neighbors": ["Barletta-Andria-Trani","Potenza","Matera","Taranto","Brindisi"],
     "regione": "Puglia"
 	},
 	{
@@ -191,7 +191,7 @@
 	},
 	{
 	"name": "Catanzaro",
-	"neighbors": ["Cosenza","Crotone","Vibo Valentia","Reggio Calabria"],
+	"neighbors": ["Cosenza","Crotone","Vibo Valentia","Reggio di Calabria"],
     "regione": "Calabria"
 	},
 	{
@@ -201,11 +201,11 @@
 	},
 	{
 	"name": "Vibo Valentia",
-	"neighbors": ["Catanzaro", "Reggio Calabria"],
+	"neighbors": ["Catanzaro", "Reggio di Calabria"],
     "regione": "Calabria"
 	},
 	{
-	"name": "Reggio Calabria",
+	"name": "Reggio di Calabria",
 	"neighbors": ["Vibo Valentia","Catanzaro"],
     "regione": "Calabria"
 	},
@@ -216,7 +216,7 @@
 	},
 	{
 	"name": "Perugia",
-	"neighbors": ["Arezzo","Siena","Terni","Rieti","Ascoli Piceno","Macerata","Ancona","Pesaro-Urbino"],
+	"neighbors": ["Arezzo","Siena","Terni","Rieti","Ascoli Piceno","Macerata","Ancona","Pesaro e Urbino"],
     "regione": "Umbria"
 	},
 	{
@@ -236,11 +236,11 @@
 	},
 	{
 	"name": "Ancona",
-	"neighbors": ["Perugia","Macerata","Pesaro-Urbino"],
+	"neighbors": ["Perugia","Macerata","Pesaro e Urbino"],
     "regione": "Marche"
 	},
 	{
-	"name": "Pesaro-Urbino",
+	"name": "Pesaro e Urbino",
 	"neighbors": ["Perugia","Arezzo","Ancona","Rimini"],
     "regione": "Marche"
 	},
@@ -261,7 +261,7 @@
 	},
 	{
 	"name": "Arezzo",
-	"neighbors": ["Siena","Perugia","Pesaro-Urbino","Rimini","Forlì-Cesena","Firenze"],
+	"neighbors": ["Siena","Perugia","Pesaro e Urbino","Rimini","Forlì-Cesena","Firenze"],
     "regione": "Toscana"
 	},
 	{
@@ -286,17 +286,17 @@
 	},
 	{
 	"name": "Lucca",
-	"neighbors": ["Pisa","Pistoia","Modena","Reggio Emilia","Massa-Carrara"],
+	"neighbors": ["Pisa","Pistoia","Modena","Reggio Emilia","Massa Carrara"],
     "regione": "Toscana"
 	},
 	{
-	"name": "Massa-Carrara",
+	"name": "Massa Carrara",
 	"neighbors": ["Lucca","Reggio Emilia","Parma","La Spezia"],
     "regione": "Toscana"
 	},
 	{
 	"name": "Rimini",
-	"neighbors": ["Pesaro-Urbino","Arezzo","Forlì-Cesena"],
+	"neighbors": ["Pesaro e Urbino","Arezzo","Forlì-Cesena"],
     "regione": "Emilia-Romagna"
 	},
 	{
@@ -326,12 +326,12 @@
 	},
 	{
 	"name": "Reggio Emilia",
-	"neighbors": ["Modena","Lucca","Massa-Carrara","Parma","Mantova"],
+	"neighbors": ["Modena","Lucca","Massa Carrara","Parma","Mantova"],
     "regione": "Emilia-Romagna"
 	},
 	{
 	"name": "Parma",
-	"neighbors": ["Massa-Carrara","La Spezia","Genova","Piacenza","Cremona","Mantova","Reggio Emilia"],
+	"neighbors": ["Massa Carrara","La Spezia","Genova","Piacenza","Cremona","Mantova","Reggio Emilia"],
     "regione": "Emilia-Romagna"
 	},
 	{
@@ -341,7 +341,7 @@
 	},
 	{
 	"name": "La Spezia",
-	"neighbors": ["Massa-Carrara","Parma","Genova"],
+	"neighbors": ["Massa Carrara","Parma","Genova"],
     "regione": "Liguria"
 	},
 	{
@@ -442,7 +442,7 @@
 	},
 	{
 	"name": "Bergamo",
-	"neighbors": ["Sondrio","Brescia","Cremona","Milano","Lecco","Monza Brianza"],
+	"neighbors": ["Sondrio","Brescia","Cremona","Milano","Lecco","Monza e della Brianza"],
     "regione": "Lombardia"
 	},
 	{
@@ -452,26 +452,26 @@
 	},
 	{
 	"name": "Lecco",
-	"neighbors": ["Bergamo","Sondrio","Como","Monza Brianza"],
+	"neighbors": ["Bergamo","Sondrio","Como","Monza e della Brianza"],
     "regione": "Lombardia"
 	},
 	{
 	"name": "Como",
-	"neighbors": ["Sondrio","Lecco","Monza Brianza","Varese"],
+	"neighbors": ["Sondrio","Lecco","Monza e della Brianza","Varese"],
     "regione": "Lombardia"
 	},
 	{
-	"name": "Monza Brianza",
+	"name": "Monza e della Brianza",
 	"neighbors": ["Lecco","Como","Bergamo","Milano","Varese"]
 	},
 	{
 	"name": "Milano",
-	"neighbors": ["Lodi","Pavia","Novara","Varese","Monza Brianza","Bergamo","Cremona"],
+	"neighbors": ["Lodi","Pavia","Novara","Varese","Monza e della Brianza","Bergamo","Cremona"],
     "regione": "Lombardia"
 	},
 	{
 	"name": "Varese",
-	"neighbors": ["Como","Monza Brianza","Milano","Novara","Verbano-Cusio-Ossola"],
+	"neighbors": ["Como","Monza e della Brianza","Milano","Novara","Verbano-Cusio-Ossola"],
     "regione": "Lombardia"
 	},
 	{
