@@ -1,0 +1,35 @@
+{
+  "config": {
+    "log": "debug"},
+  "source": { "file": { "path": "/home/fabiano/dpc-covid19-ita-province-20200224.csv" } },
+  "extractor": { "csv": {} },
+  "transformers": [
+	 { "merge": { "joinFieldName": "data", "lookup": "Data.data" } },	 
+         { "vertex": { "class": "Data" } },
+	 { "edge": {
+                    "class": "alGiorno",
+		     "joinFieldName": "totale_casi",
+		     "lookup": "Caso.totale_casi",
+		     "direction": "in",
+		     "unresolvedLinkAction": "CREATE"} }
+  ],
+  "loader": {
+    "orientdb": {
+        "dbURL": "plocal:/home/fabiano/orientdb-3.1.0/databases/BigData",
+        "dbUser": "admin",
+         "dbPassword": "admin",
+	 "dbAutoDropIfExists": false,
+         "dbAutoCreate": true,
+         "standardElementConstraints": false,
+         "tx": false,
+         "wal": false,
+         "batchCommit": 1000,
+         "dbType": "graph",
+         "classes": [
+	  {"name": "Caso", "extends": "V"},
+          {"name": "Data", "extends": "V"},
+	  {"name": "alGiorno", "extends": "E"}
+       ]
+    }
+  }
+}
