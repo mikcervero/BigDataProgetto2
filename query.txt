@@ -55,3 +55,61 @@ RETURN *
 
 
 MATCH p=()-[r:POSSIEDE]->() DELETE r // eliminare relationship
+
+
+
+
+cut -d, -f1,4,5,6,7,8,9,10,11,13,14,15,18,19 /Applications/GitHub/BigDataProgetto2/Dataset/nope.csv  > /Applications/GitHub/BigDataProgetto2/Dataset/dpc-covid19-regioni.csv
+
+sostituzione ; with ,
+
+LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-regioni.csv" AS csvLine
+MATCH (regione:Regione { name: csvLine.denominazione_regione })
+SET regione.latidudine = csvLine.lat,regione.longitudine = csvLine.long
+RETURN *
+
+
+LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-regioni.csv" AS csvLine 
+MERGE (data:Data {value: csvLine.data })
+
+LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-regioni.csv" AS csvLine 
+MERGE (positivi:Positivi {value: toInteger(csvLine.totale_casi)})
+
+LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-regioni.csv" AS csvLine 
+MERGE (positivi:Positivi {value: toInteger(csvLine.tamponi)})
+
+LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-regioni.csv" AS csvLine
+MATCH (regione:Regione {name: csvLine.denominazione_regione}),(positivi:Positivi {value: toInteger(csvLine.totale_casi)})
+MERGE (regione)-[:POSSIEDE]->(positivi)
+RETURN *
+
+
+LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-regioni.csv" AS csvLine
+MATCH (data:Data {value:csvLine.data}),(positivi:Positivi {value: toInteger(csvLine.totale_casi)})
+MERGE (positivi)-[:NEL_GIORNO]->(data)
+RETURN *
+
+LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-regioni.csv" AS csvLine
+MATCH (regione:Regione {name: csvLine.denominazione_regione}),(positivi:Positivi {value: toInteger(csvLine.tamponi)})
+MERGE (regione)-[:HA_EFFETTUATO_TAMPONI]->(positivi)
+RETURN *
+
+LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-regioni.csv" AS csvLine
+MATCH (data:Data {value:csvLine.data}),(positivi:Positivi {value: toInteger(csvLine.tamponi)})
+MERGE (positivi)-[:TAMPONE_NEL_GIORNO]->(data)
+RETURN *
+
+LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-regioni.csv" AS csvLine
+MATCH (regione:Regione {name: csvLine.denominazione_regione}),(positivi:Positivi {value: toInteger(csvLine.deceduti)})
+MERGE (regione)-[:POSSIEDE_DECEDUTI]->(positivi)
+RETURN *
+
+LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-regioni.csv" AS csvLine
+MATCH (data:Data {value:csvLine.data}),(positivi:Positivi {value: toInteger(csvLine.deceduti)})
+MERGE (positivi)-[:DECEDUTI_NEL_GIORNO]->(data)
+RETURN *
+
+match (n:Positivi)-[:HA_EFFETTUATO_TAMPONI]-(regione:Regione) return * order by n.value desc limit 30
+
+
+
