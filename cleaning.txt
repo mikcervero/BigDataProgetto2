@@ -1,0 +1,6 @@
+cut -d, -f1,4,5,6,7,8,9,10,11,13,14,15,18,19 /Applications/GitHub/BigDataProgetto2/Dataset/nope.csv  > /Applications/GitHub/BigDataProgetto2/Dataset/dpc-covid19-regioni.csv
+
+sostituzione ; with ,
+
+
+awk -F, '{ if($6 != "In fase di definizione/aggiornamento") print $0;}' dpc-covid19-ita-province-20200224.csv > nuovo.csv //Eliminari righe
