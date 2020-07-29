@@ -68,6 +68,8 @@ MATCH (regione:Regione { name: csvLine.denominazione_regione })
 SET regione.latidudine = csvLine.lat,regione.longitudine = csvLine.long
 RETURN *
 
+LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-regioni.csv" AS csvLine 
+MERGE (positivi:Positivi {value: toInteger(csvLine.deceduti)})
 
 LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-regioni.csv" AS csvLine 
 MERGE (data:Data {value: csvLine.data })
