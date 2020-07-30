@@ -114,4 +114,24 @@ RETURN *
 match (n:Positivi)-[:HA_EFFETTUATO_TAMPONI]-(regione:Regione) return * order by n.value desc limit 30
 
 
+match (n:Positivi)-[:POSSIEDE]-(p:Provincia) with p,max(n.value) as mx return p.name,mx order by mx DESC
+
+MATCH (start:Provincia {name: 'Milano'}), (end:Provincia {name: 'Torino'})
+CALL gds.alpha.shortestPath.write({
+  nodeProjection: 'Provincia',
+  relationshipProjection: {
+    CONFINA_CON: {
+      type: 'CONFINA_CON',
+      properties: 'cost',
+      orientation: 'UNDIRECTED'
+    }
+  },
+  startNode: start,
+  endNode: end,
+  relationshipWeightProperty: 'cost',
+  writeProperty: 'sssp'
+})
+YIELD nodeCount, totalCost
+RETURN nodeCount,totalCost
+
 
