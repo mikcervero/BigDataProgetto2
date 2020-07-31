@@ -135,3 +135,11 @@ YIELD nodeCount, totalCost
 RETURN nodeCount,totalCost
 
 
+// positivi totali nella fase uno per ogni regione in ordine decrescente
+
+match (p:Positivi)-[:DECEDUTI_NEL_GIORNO]-(d:Data) 
+where d.value='2020-05-04' 
+WITH p.value as valore,d.value as data 
+MATCH (n:Positivi)-[:POSSIEDE_DECEDUTI]-(r:Regione) 
+WHERE n.value in valore return r.name as regione ,n.value as totali_positivi,data 
+order by n.value DESC
