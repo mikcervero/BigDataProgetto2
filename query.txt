@@ -134,10 +134,25 @@ CALL gds.alpha.shortestPath.write({
 YIELD nodeCount, totalCost
 RETURN nodeCount,totalCost
 
+//delete relationship
+
+MATCH (n)-[r:DECEDUTI_NEL_GIORNO]->()
+DELETE r
+
+
+//insert properties in relationship
+
+LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-regioni.csv" AS csvLine
+MATCH (data:Data {value:csvLine.data}),(positivi:Positivi {value: toInteger(csvLine.deceduti)}),(regioni:Regione{name:csvLine.denominazione_regione})
+MERGE (positivi)-[:DECEDUTI_NEL_GIORNO{value:regioni.name}]->(data)
+RETURN *
+
 
 // deceduti totali nella fase uno per ogni regione in ordine decrescente
 
-match (d:Data)-[:DECEDUTI_NEL_GIORNO]-(p:Positivi)-[:POSSIEDE_DECEDUTI]-(r:Regione) 
+match (r:Regione)-[:POSSIEDE_DECEDUTI]-(p:Positivi)-[:DECEDUTI_NEL_GIORNO{value:r.name}]-(d:Data)
 where d.value='2020-05-03'
 with r,max(p.value) as mx,d.value as data
 return mx  as deceduti_totali,r.name as regione, data order by deceduti_totali DESC
+
+
