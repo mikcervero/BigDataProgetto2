@@ -152,7 +152,7 @@ RETURN *
 
 match (r:Regione)-[:POSSIEDE_DECEDUTI]-(p:Positivi)-[:DECEDUTI_NEL_GIORNO{value:r.name}]-(d:Data)
 where d.value='2020-05-03'
-with r,max(p.value) as mx,d.value as data
-return mx  as deceduti_totali,r.name as regione, data order by deceduti_totali DESC
+with r,p.value as mx,d.value as data
+return mx as deceduti_totali,r.name as regione, data order by deceduti_totali DESC
 
 
