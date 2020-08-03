@@ -155,4 +155,13 @@ where d.value='2020-05-03'
 with r,p.value as mx,d.value as data
 return mx as deceduti_totali,r.name as regione, data order by deceduti_totali DESC
 
+//deceduti totali nella fase due per ogni regione in ordine decrescente
 
+match (r:Regione)-[:POSSIEDE_DECEDUTI]-(p:Positivi)-[:DECEDUTI_NEL_GIORNO{value:r.name}]-(d:Data)
+where d.value='2020-05-03'
+with r,p.value as valore_fase1 
+match (r:Regione)-[:POSSIEDE_DECEDUTI]-(n:Positivi)-[:DECEDUTI_NEL_GIORNO{value:r.name}]-(d:Data)
+where d.value='2020-06-15'
+with r,n.value-valore_fase1 as valore_fase2,d.value as data
+return valore_fase2 as deceduti_totali_fase2,r.name as regione,data 
+order by deceduti_totali_fase2 DESC
