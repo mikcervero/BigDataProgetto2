@@ -60,7 +60,11 @@
     "neighbors": ["Friuli Venezia Giulia","Trentino-Alto Adige","Emilia-Romagna","Lombardia"]
   },
   {
-    "name": "Trentino-Alto Adige",
+    "name": "P.A. Bolzano",
+    "neighbors": ["Lombardia","Veneto"]
+  },
+  {
+    "name": "P.A. Trento",
     "neighbors": ["Lombardia","Veneto"]
   },
   {
