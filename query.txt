@@ -49,8 +49,8 @@ MERGE (provincia)-[:POSSIEDE]->(positivi)
 RETURN *
 
 LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-province.csv" AS csvLine
-MATCH (data:Data {value:csvLine.data}),(positivi:Positivi {value: toInteger(csvLine.totale_casi)})
-MERGE (positivi)-[:NEL_GIORNO]->(data)
+MATCH (data:Data {value:csvLine.data}),(positivi:Positivi {value: toInteger(csvLine.totale_casi)}),(provincia:Provincia{name:csvLine.denominazione_provincia})
+MERGE (positivi)-[:POSITIVI_NEL_GIORNO{value:provincia.name}]->(data)
 RETURN *
 
 
@@ -82,13 +82,13 @@ MERGE (positivi:Positivi {value: toInteger(csvLine.tamponi)})
 
 LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-regioni.csv" AS csvLine
 MATCH (regione:Regione {name: csvLine.denominazione_regione}),(positivi:Positivi {value: toInteger(csvLine.totale_casi)})
-MERGE (regione)-[:POSSIEDE]->(positivi)
+MERGE (regione)-[:POSSIEDE_POSITIVI]->(positivi)
 RETURN *
 
 
 LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-regioni.csv" AS csvLine
-MATCH (data:Data {value:csvLine.data}),(positivi:Positivi {value: toInteger(csvLine.totale_casi)})
-MERGE (positivi)-[:NEL_GIORNO]->(data)
+MATCH (data:Data {value:csvLine.data}),(positivi:Positivi {value: toInteger(csvLine.totale_casi)}),(regione:Regione{name:csvLine.denominazione_regione})
+MERGE (positivi)-[:POSITIVI_NEL_GIORNO{value:regione.name}]->(data)
 RETURN *
 
 LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-regioni.csv" AS csvLine
@@ -97,8 +97,8 @@ MERGE (regione)-[:HA_EFFETTUATO_TAMPONI]->(positivi)
 RETURN *
 
 LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-regioni.csv" AS csvLine
-MATCH (data:Data {value:csvLine.data}),(positivi:Positivi {value: toInteger(csvLine.tamponi)}),(regioni:Regione{name:csvLine.denominazione_regione})
-MERGE (positivi)-[:TAMPONE_NEL_GIORNO{value:regioni.name}]->(data)
+MATCH (data:Data {value:csvLine.data}),(positivi:Positivi {value: toInteger(csvLine.tamponi)}),(regione:Regione{name:csvLine.denominazione_regione})
+MERGE (positivi)-[:TAMPONE_NEL_GIORNO{value:regione.name}]->(data)
 RETURN *
 
 LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-regioni.csv" AS csvLine
@@ -107,8 +107,8 @@ MERGE (regione)-[:POSSIEDE_DECEDUTI]->(positivi)
 RETURN *
 
 LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-regioni.csv" AS csvLine
-MATCH (data:Data {value:csvLine.data}),(positivi:Positivi {value: toInteger(csvLine.deceduti)}),(regioni:Regione{name:csvLine.denominazione_regione})
-MERGE (positivi)-[:DECEDUTI_NEL_GIORNO{value:regioni.name}]->(data)
+MATCH (data:Data {value:csvLine.data}),(positivi:Positivi {value: toInteger(csvLine.deceduti)}),(regione:Regione{name:csvLine.denominazione_regione})
+MERGE (positivi)-[:DECEDUTI_NEL_GIORNO{value:regione.name}]->(data)
 RETURN *
 
 match (n:Positivi)-[:HA_EFFETTUATO_TAMPONI]-(regione:Regione) return * order by n.value desc limit 30
@@ -140,8 +140,6 @@ MATCH (n)-[r:DECEDUTI_NEL_GIORNO]->()
 DELETE r
 
 
-
-
 // deceduti totali nella fase uno per ogni regione in ordine decrescente
 
 match (r:Regione)-[:POSSIEDE_DECEDUTI]-(p:Positivi)-[:DECEDUTI_NEL_GIORNO{value:r.name}]-(d:Data)
@@ -164,5 +162,26 @@ order by deceduti_totali_fase2 DESC
 
 match (n:Positivi)-[:TAMPONE_NEL_GIORNO]-(d:Data) where d.value='2020-05-03' return sum(n.value)/21 as media_tamponi,d.value as data_fase1
 
-match (n:Positivi)-[:TAMPONE_NEL_GIORNO]-(d:Data) where d.value='2020-05-03' return avg(n.value) as media_tamponi,d.value as data_fase1
+
+//somma tamponi di tutte le regioni effettuati nella fase 1 e 2
+
+match (n:Positivi)-[:TAMPONE_NEL_GIORNO]-(d:Data) where d.value='2020-04-28' return sum(n.value) as somma_tamponi,d.value as data
+UNION match (r:Regione)-[:HA_EFFETTUATO_TAMPONI]-(p:Positivi)-[:TAMPONE_NEL_GIORNO{value:r.name}]-(d:Data)
+where d.value='2020-04-28'
+with r,p.value as valore_fase1 
+match (r:Regione)-[:HA_EFFETTUATO_TAMPONI]-(n:Positivi)-[:TAMPONE_NEL_GIORNO{value:r.name}]-(d:Data)
+where d.value='2020-06-13'
+with r,n.value-valore_fase1 as valore_fase2,d.value as data
+return sum(valore_fase2) as somma_tamponi,data
+
+//somma positivi di tutte le regioni individuati nella fase 1 e 2
+
+match (r:Regione)-[:POSSIEDE]-(n:Positivi)-[:POSITIVI_NEL_GIORNO{value:r.name}]-(d:Data) where d.value='2020-05-03' return sum(n.value) as somma_positivi,d.value as data
+UNION match (r:Regione)-[:POSSIEDE]-(p:Positivi)-[:POSITIVI_NEL_GIORNO{value:r.name}]-(d:Data)
+where d.value='2020-05-03'
+with r,p.value as valore_fase1 
+match (r:Regione)-[:POSSIEDE]-(n:Positivi)-[:POSITIVI_NEL_GIORNO{value:r.name}]-(d:Data)
+where d.value='2020-06-15'
+with r,n.value-valore_fase1 as valore_fase2,d.value as data
+return sum(valore_fase2) as somma_positivi,data
 
