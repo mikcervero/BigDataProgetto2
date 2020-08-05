@@ -97,8 +97,8 @@ MERGE (regione)-[:HA_EFFETTUATO_TAMPONI]->(positivi)
 RETURN *
 
 LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-regioni.csv" AS csvLine
-MATCH (data:Data {value:csvLine.data}),(positivi:Positivi {value: toInteger(csvLine.tamponi)})
-MERGE (positivi)-[:TAMPONE_NEL_GIORNO]->(data)
+MATCH (data:Data {value:csvLine.data}),(positivi:Positivi {value: toInteger(csvLine.tamponi)}),(regioni:Regione{name:csvLine.denominazione_regione})
+MERGE (positivi)-[:TAMPONE_NEL_GIORNO{value:regioni.name}]->(data)
 RETURN *
 
 LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-regioni.csv" AS csvLine
@@ -159,3 +159,10 @@ where d.value='2020-06-15'
 with r,n.value-valore_fase1 as valore_fase2,d.value as data
 return valore_fase2 as deceduti_totali_fase2,r.name as regione,data 
 order by deceduti_totali_fase2 DESC
+
+//media tamponi di tutte le regioni effettuati nella fase 1
+
+match (n:Positivi)-[:TAMPONE_NEL_GIORNO]-(d:Data) where d.value='2020-05-03' return sum(n.value)/21 as media_tamponi,d.value as data_fase1
+
+match (n:Positivi)-[:TAMPONE_NEL_GIORNO]-(d:Data) where d.value='2020-05-03' return avg(n.value) as media_tamponi,d.value as data_fase1
+
