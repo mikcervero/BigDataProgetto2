@@ -1,187 +1,25 @@
-
-CREATE CONSTRAINT ON (provincia:Provincia) ASSERT provincia.name IS UNIQUE
-CREATE CONSTRAINT ON (regione:Regione) ASSERT regione.name IS UNIQUE
-CREATE CONSTRAINT ON (data:Data) ASSERT data.value IS UNIQUE
-CREATE CONSTRAINT ON (positivi:Positivi) ASSERT positivi.value IS UNIQUE
-
-
-CALL apoc.load.json("file:///regioni.json") YIELD value AS v
-MERGE (r:Regione {name: v.name})
-FOREACH (n IN v.neighbors |
-  MERGE (neighbor:Regione {name: n})
-  MERGE (r)-[:CONFINA_CON]-(neighbor)
-)
-RETURN *
+traverse in("Possiede") from (select from Caso order by totale_casi desc limit 5)
+select max($temp.totale_casi), $temp.name from Caso let $temp = (traverse out("Possiede") from (select from Provincia where name='Roma'))
+select from  (select max(totale_casi) as total,denominazione_provincia from (traverse out("Possiede") from (select from Provincia)) group by denominazione_provincia) order by total desc limit 5
+select from (select expand(path) from (select shortestPath($from, $to,'Both','Confina') as path let $from = (select from Provincia where name='Lodi'), $to=(select from Provincia where name='Padova') unwind path) )
 
 
-CALL apoc.load.json("file:///province.json") YIELD value AS v
-MERGE (provincia:Provincia {name: v.name})
-FOREACH (n IN v.neighbors |
-  MERGE (neighbor:Provincia {name: n})
-  MERGE (provincia)-[:CONFINA_CON]-(neighbor)
-)
-RETURN *
+select from (select name, max(a) as total from (select name, out("Possiede").totale_casi as a from Provincia unwind a ) group by name) order by total desc limit 5 //GIUSTA
 
-CALL apoc.load.json("file:///province.json") YIELD value AS v
-MATCH (provincia:Provincia {name:v.name}),(regione:Regione {name:v.regione})
-MERGE (provincia)-[:PROVINCIA_DI]->(regione)
-RETURN *
+select d.in("Ha").name,d.deceduti from (select in("alGiornoDeceduti") as d from Data where data="2020-05-03 00:00:00"  unwind d)
+select from (select d.out("alGiornoDeceduti").data from (select name as n, out("Ha") as d from Regione unwind d)) where data="2020-05-03 00:00:00"
+select from (select d.out("alGiornoDeceduti").data as f, n,d.deceduti from (select name as n, out("Ha") as d from Regione unwind d) unwind f) where f = "2020-05-03 00:00:00"
 
-MATCH (n)
-DETACH DELETE n //per eliminare tutti i nodi
-
-LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-province.csv" AS csvLine
-MATCH (provincia:Provincia { name: csvLine.denominazione_provincia })
-SET provincia.sigla = csvLine.sigla_provincia,provincia.latidudine = csvLine.lat,provincia.longitudine = csvLine.long
-RETURN *
-
-
-LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-province.csv" AS csvLine 
-MERGE (data:Data {value: csvLine.data })
-
-LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-province.csv" AS csvLine 
-MERGE (positivi:Positivi {value: toInteger(csvLine.totale_casi)})
-
-
-LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-province.csv" AS csvLine
-MATCH (provincia:Provincia {name: csvLine.denominazione_provincia}),(positivi:Positivi {value: toInteger(csvLine.totale_casi)})
-MERGE (provincia)-[:POSSIEDE]->(positivi)
-RETURN *
-
-LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-province.csv" AS csvLine
-MATCH (data:Data {value:csvLine.data}),(positivi:Positivi {value: toInteger(csvLine.totale_casi)}),(provincia:Provincia{name:csvLine.denominazione_provincia})
-MERGE (positivi)-[:POSITIVI_NEL_GIORNO{value:provincia.name}]->(data)
-RETURN *
-
-
-MATCH p=()-[r:POSSIEDE]->() DELETE r // eliminare relationship
+select n,f,max(r) from (select d.out("alGiornoDeceduti").data as f, n,d.deceduti as r from (select name as n, out("Ha") as d from Regione unwind d) unwind f) where f = "2020-05-04 00:00:00" group by n 
 
 
 
 
-cut -d, -f1,4,5,6,7,8,9,10,11,13,14,15,18,19 /Applications/GitHub/BigDataProgetto2/Dataset/nope.csv  > /Applications/GitHub/BigDataProgetto2/Dataset/dpc-covid19-regioni.csv
 
-sostituzione ; with ,
+match {class:Regione, as:r} -Ha-> {class:Deceduto, as:d} .outE("alGiornoDeceduti"){where:(name=$matched.r.name)}.inV() {class:Data, as:dd, where:(data="2020-05-03 00:00:00")} return distinct r.name,d.deceduti,dd.data //GIUSTA
 
-LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-regioni.csv" AS csvLine
-MATCH (regione:Regione { name: csvLine.denominazione_regione })
-SET regione.latidudine = csvLine.lat,regione.longitudine = csvLine.long
-RETURN *
+select max(c)-min(c), b  from (match {class:Regione, as:r} -Ha-> {class:Deceduto, as:d} .outE("alGiornoDeceduti"){where:(name=$matched.r.name)}.inV() {class:Data, as:dd, where:(data="2020-06-14 00:00:00" or data="2020-05-03 00:00:00")} return distinct r.name as b,d.deceduti as c ) group by b //GIUSTA
 
-LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-regioni.csv" AS csvLine 
-MERGE (positivi:Positivi {value: toInteger(csvLine.deceduti)})
+select avg(tamponi)  from (match {class:Regione, as:r} -Ha_effettuato_tamponi-> {class:Tampone, as:t} .outE("alGiornoTamponi"){where:(name=$matched.r.name)}.inV() {class:Data, as:dd, where:(data="2020-05-03 00:00:00")} return distinct t.tamponi as tamponi, dd.data) //GIUSTA
 
-LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-regioni.csv" AS csvLine 
-MERGE (data:Data {value: csvLine.data })
-
-LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-regioni.csv" AS csvLine 
-MERGE (positivi:Positivi {value: toInteger(csvLine.totale_casi)})
-
-LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-regioni.csv" AS csvLine 
-MERGE (positivi:Positivi {value: toInteger(csvLine.tamponi)})
-
-LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-regioni.csv" AS csvLine
-MATCH (regione:Regione {name: csvLine.denominazione_regione}),(positivi:Positivi {value: toInteger(csvLine.totale_casi)})
-MERGE (regione)-[:POSSIEDE_POSITIVI]->(positivi)
-RETURN *
-
-
-LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-regioni.csv" AS csvLine
-MATCH (data:Data {value:csvLine.data}),(positivi:Positivi {value: toInteger(csvLine.totale_casi)}),(regione:Regione{name:csvLine.denominazione_regione})
-MERGE (positivi)-[:POSITIVI_NEL_GIORNO{value:regione.name}]->(data)
-RETURN *
-
-LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-regioni.csv" AS csvLine
-MATCH (regione:Regione {name: csvLine.denominazione_regione}),(positivi:Positivi {value: toInteger(csvLine.tamponi)})
-MERGE (regione)-[:HA_EFFETTUATO_TAMPONI]->(positivi)
-RETURN *
-
-LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-regioni.csv" AS csvLine
-MATCH (data:Data {value:csvLine.data}),(positivi:Positivi {value: toInteger(csvLine.tamponi)}),(regione:Regione{name:csvLine.denominazione_regione})
-MERGE (positivi)-[:TAMPONE_NEL_GIORNO{value:regione.name}]->(data)
-RETURN *
-
-LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-regioni.csv" AS csvLine
-MATCH (regione:Regione {name: csvLine.denominazione_regione}),(positivi:Positivi {value: toInteger(csvLine.deceduti)})
-MERGE (regione)-[:POSSIEDE_DECEDUTI]->(positivi)
-RETURN *
-
-LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-regioni.csv" AS csvLine
-MATCH (data:Data {value:csvLine.data}),(positivi:Positivi {value: toInteger(csvLine.deceduti)}),(regione:Regione{name:csvLine.denominazione_regione})
-MERGE (positivi)-[:DECEDUTI_NEL_GIORNO{value:regione.name}]->(data)
-RETURN *
-
-match (n:Positivi)-[:HA_EFFETTUATO_TAMPONI]-(regione:Regione) return * order by n.value desc limit 30
-
-
-match (n:Positivi)-[:POSSIEDE]-(p:Provincia) with p,max(n.value) as mx return p.name,mx order by mx DESC
-
-MATCH (start:Provincia {name: 'Milano'}), (end:Provincia {name: 'Torino'})
-CALL gds.alpha.shortestPath.write({
-  nodeProjection: 'Provincia',
-  relationshipProjection: {
-    CONFINA_CON: {
-      type: 'CONFINA_CON',
-      properties: 'cost',
-      orientation: 'UNDIRECTED'
-    }
-  },
-  startNode: start,
-  endNode: end,
-  relationshipWeightProperty: 'cost',
-  writeProperty: 'sssp'
-})
-YIELD nodeCount, totalCost
-RETURN nodeCount,totalCost
-
-//delete relationship
-
-MATCH (n)-[r:DECEDUTI_NEL_GIORNO]->()
-DELETE r
-
-
-// deceduti totali nella fase uno per ogni regione in ordine decrescente
-
-match (r:Regione)-[:POSSIEDE_DECEDUTI]-(p:Positivi)-[:DECEDUTI_NEL_GIORNO{value:r.name}]-(d:Data)
-where d.value='2020-05-03'
-with r,p.value as mx,d.value as data
-return mx as deceduti_totali,r.name as regione, data order by deceduti_totali DESC
-
-//deceduti totali nella fase due per ogni regione in ordine decrescente
-
-match (r:Regione)-[:POSSIEDE_DECEDUTI]-(p:Positivi)-[:DECEDUTI_NEL_GIORNO{value:r.name}]-(d:Data)
-where d.value='2020-05-03'
-with r,p.value as valore_fase1 
-match (r:Regione)-[:POSSIEDE_DECEDUTI]-(n:Positivi)-[:DECEDUTI_NEL_GIORNO{value:r.name}]-(d:Data)
-where d.value='2020-06-15'
-with r,n.value-valore_fase1 as valore_fase2,d.value as data
-return valore_fase2 as deceduti_totali_fase2,r.name as regione,data 
-order by deceduti_totali_fase2 DESC
-
-//media tamponi di tutte le regioni effettuati nella fase 1
-
-match (n:Positivi)-[:TAMPONE_NEL_GIORNO]-(d:Data) where d.value='2020-05-03' return sum(n.value)/21 as media_tamponi,d.value as data_fase1
-
-
-//somma tamponi di tutte le regioni effettuati nella fase 1 e 2
-
-match (n:Positivi)-[:TAMPONE_NEL_GIORNO]-(d:Data) where d.value='2020-04-28' return sum(n.value) as somma_tamponi,d.value as data
-UNION match (r:Regione)-[:HA_EFFETTUATO_TAMPONI]-(p:Positivi)-[:TAMPONE_NEL_GIORNO{value:r.name}]-(d:Data)
-where d.value='2020-04-28'
-with r,p.value as valore_fase1 
-match (r:Regione)-[:HA_EFFETTUATO_TAMPONI]-(n:Positivi)-[:TAMPONE_NEL_GIORNO{value:r.name}]-(d:Data)
-where d.value='2020-06-13'
-with r,n.value-valore_fase1 as valore_fase2,d.value as data
-return sum(valore_fase2) as somma_tamponi,data
-
-//somma positivi di tutte le regioni individuati nella fase 1 e 2
-
-match (r:Regione)-[:POSSIEDE]-(n:Positivi)-[:POSITIVI_NEL_GIORNO{value:r.name}]-(d:Data) where d.value='2020-05-03' return sum(n.value) as somma_positivi,d.value as data
-UNION match (r:Regione)-[:POSSIEDE]-(p:Positivi)-[:POSITIVI_NEL_GIORNO{value:r.name}]-(d:Data)
-where d.value='2020-05-03'
-with r,p.value as valore_fase1 
-match (r:Regione)-[:POSSIEDE]-(n:Positivi)-[:POSITIVI_NEL_GIORNO{value:r.name}]-(d:Data)
-where d.value='2020-06-15'
-with r,n.value-valore_fase1 as valore_fase2,d.value as data
-return sum(valore_fase2) as somma_positivi,data
-
+select sum(somma)/sum(casi) from (select min(casi)*min(tamponi) as somma, sum(casi) as casi from (select expand($c) let $a = (select from (match {class:Regione, as:r} -PossiedeCasiRegione-> {class:Caso, as:c} .outE("alGiornoCasi"){where:(name=$matched.r.name)}.inV() {class:Data, as:dd, where:(data="2020-05-03 00:00:00")} return distinct r.name as nregione, c.totale_casi as casi, dd.data)), $b = (select from (match {class:Regione, as:r} -Ha_effettuato_tamponi-> {class:Tampone, as:t} .outE("alGiornoTamponi"){where:(name=$matched.r.name)}.inV() {class:Data, as:dd, where:(data="2020-05-03 00:00:00")} return distinct r.name as nregione, t.tamponi as tamponi, dd.data)), $c = unionall($a,$b)) group by nregione)
