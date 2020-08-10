@@ -397,22 +397,22 @@
 	{
 	"name": "Pordenone",
 	"neighbors": ["Belluno","Treviso","Venezia","Udine"],
-    "regione": "Friuli-Venezia Giulia"
+    "regione": "Friuli Venezia Giulia"
 	},
 	{
 	"name": "Udine",
 	"neighbors": ["Pordenone","Belluno","Venezia","Gorizia"],
-    "regione": "Friuli-Venezia Giulia"
+    "regione": "Friuli Venezia Giulia"
 	},
 	{
 	"name": "Gorizia",
 	"neighbors": ["Udine","Trieste"],
-    "regione": "Friuli-Venezia Giulia"
+    "regione": "Friuli Venezia Giulia"
 	},
 	{
 	"name": "Trieste",
 	"neighbors": ["Gorizia"],
-    "regione": "Friuli-Venezia Giulia"
+    "regione": "Friuli Venezia Giulia"
 	},
 	{
 	"name": "Trento",
