@@ -1,7 +1,7 @@
 {
   "config": {
     "log": "debug"},
-  "source": { "file": { "path": "/home/fabiano/dpc-covid19-ita-province-20200224.csv" } },
+  "source": { "file": { "path": "/home/fabiano/nuovo2.csv" } },
   "extractor": { "csv": {} },
   "transformers": [
 	 { "merge": { "joinFieldName": "data", "lookup": "Data.data" } },	 
@@ -10,6 +10,8 @@
                     "class": "alGiorno",
 		     "joinFieldName": "totale_casi",
 		     "lookup": "Caso.totale_casi",
+		     "skipDuplicates":true,
+		     "edgeFields": { "name": "${input.denominazione_provincia}" },
 		     "direction": "in",
 		     "unresolvedLinkAction": "CREATE"} }
   ],
@@ -20,16 +22,13 @@
          "dbPassword": "admin",
 	 "dbAutoDropIfExists": false,
          "dbAutoCreate": true,
-         "standardElementConstraints": false,
-         "tx": false,
-         "wal": false,
-         "batchCommit": 1000,
          "dbType": "graph",
          "classes": [
 	  {"name": "Caso", "extends": "V"},
           {"name": "Data", "extends": "V"},
 	  {"name": "alGiorno", "extends": "E"}
-       ]
+       ],
+	 "indexes": [{"class":"Data", "fields":["data:datetime"], "type":"UNIQUE_HASH_INDEX" }]
     }
   }
 }
