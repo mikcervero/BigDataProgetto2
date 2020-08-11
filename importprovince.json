@@ -31,12 +31,9 @@
       "dbPassword": "admin",
       "dbAutoDropIfExists": false,
       "dbAutoCreate": true,
-      "standardElementConstraints": false,
-      "tx": false,
-      "wal": false,
-      "batchCommit": 1000,
       "dbType": "graph",
-      "classes": [{"name": "Regione", "extends":"V"}, {"name": "Provincia", "extends":"V"}, {"name": "Confina", "extends":"E"}, {"name": "ProvinciaDi", "extends":"E"}]
+      "classes": [{"name": "Regione", "extends":"V"}, {"name": "Provincia", "extends":"V"}, {"name": "Confina", "extends":"E"}, {"name": "ProvinciaDi", "extends":"E"}],
+      "indexes": [{"class":"Provincia", "fields":["name:string"], "type":"UNIQUE_HASH_INDEX" }]
     }
   }
 }
