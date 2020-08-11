@@ -1,10 +1,10 @@
 {
   "config": {
     "log": "debug"},
-  "source": { "file": { "path": "/home/fabiano/dpc-covid19-ita-province-20200224.csv" } },
+  "source": { "file": { "path": "/home/fabiano/nuovo2.csv" } },
   "extractor": { "csv": {} },
   "transformers": [
-	 { "merge": { "joinFieldName": "totale_casi", "lookup": "Caso.totale_casi" } },	 
+	 { "merge": { "joinFieldName": "totale_casi", "lookup": "Caso.totale_casi" } },		 
          { "vertex": { "class": "Caso" } },
 	 { "edge": {
                     "class": "Possiede",
@@ -20,17 +20,14 @@
          "dbPassword": "admin",
 	 "dbAutoDropIfExists": false,
          "dbAutoCreate": true,
-         "standardElementConstraints": false,
-         "tx": false,
-         "wal": false,
-         "batchCommit": 1000,
          "dbType": "graph",
          "classes": [
 	  {"name": "Caso", "extends": "V"},
           {"name": "Regione", "extends": "V"},
           {"name": "Provincia", "extends": "V"},
           {"name": "Possiede", "extends": "E"}
-       ]
+       ],
+	 "indexes": [{"class":"Caso", "fields":["totale_casi:integer"], "type":"UNIQUE_HASH_INDEX" }]
     }
   }
 }
