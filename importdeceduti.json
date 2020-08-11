@@ -1,0 +1,31 @@
+{
+  "config": {
+    "log": "debug"},
+  "source": { "file": { "path": "/home/fabiano/dpc-covid19-ita-regioni.csv" } },
+  "extractor": { "csv": {} },
+  "transformers": [
+	{ "merge": { "joinFieldName": "deceduti", "lookup": "Deceduto.deceduti" } },	 
+         { "vertex": { "class": "Deceduto" } },
+	 { "edge": {
+                    "class": "Ha",
+		     "joinFieldName": "denominazione_regione",
+		     "lookup": "Regione.name",
+		     "direction": "in",
+		     "unresolvedLinkAction": "CREATE"} }
+  ],
+  "loader": {
+    "orientdb": {
+        "dbURL": "plocal:/home/fabiano/orientdb-3.1.0/databases/BigData",
+        "dbUser": "admin",
+         "dbPassword": "admin",
+	 "dbAutoDropIfExists": false,
+         "dbAutoCreate": true,
+         "dbType": "graph",
+         "classes": [
+	  {"name": "Deceduto", "extends": "V"},
+	  {"name": "Ha", "extends": "E"}
+       ],
+	 "indexes": [{"class":"Deceduto", "fields":["deceduti:integer"], "type":"UNIQUE_HASH_INDEX" }]
+    }
+  }
+}

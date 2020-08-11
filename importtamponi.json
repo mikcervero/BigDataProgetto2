@@ -1,0 +1,31 @@
+{
+  "config": {
+    "log": "debug"},
+  "source": { "file": { "path": "/home/fabiano/dpc-covid19-ita-regioni.csv" } },
+  "extractor": { "csv": {} },
+  "transformers": [
+	{ "merge": { "joinFieldName": "tamponi", "lookup": "Tampone.tamponi" } },	 
+         { "vertex": { "class": "Tampone" } },
+	 { "edge": {
+                    "class": "Ha_effettuato_tamponi",
+		     "joinFieldName": "denominazione_regione",
+		     "lookup": "Regione.name",
+		     "direction": "in",
+		     "unresolvedLinkAction": "CREATE"} }
+  ],
+  "loader": {
+    "orientdb": {
+        "dbURL": "plocal:/home/fabiano/orientdb-3.1.0/databases/BigData",
+        "dbUser": "admin",
+         "dbPassword": "admin",
+	 "dbAutoDropIfExists": false,
+         "dbAutoCreate": true,
+         "dbType": "graph",
+         "classes": [
+	  {"name": "Tampone", "extends": "V"},
+	  {"name": "Ha_effettuato_tamponi", "extends": "E"}
+       ],
+	 "indexes": [{"class":"Tampone", "fields":["tamponi:integer"], "type":"UNIQUE_HASH_INDEX" }]
+    }
+  }
+}

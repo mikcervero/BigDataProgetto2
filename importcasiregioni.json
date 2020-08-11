@@ -1,0 +1,33 @@
+{
+  "config": {
+    "log": "debug"},
+  "source": { "file": { "path": "/home/fabiano/dpc-covid19-ita-regioni.csv" } },
+  "extractor": { "csv": {} },
+  "transformers": [
+	 { "merge": { "joinFieldName": "totale_casi", "lookup": "Caso.totale_casi" } },		 
+         { "vertex": { "class": "Caso" } },
+	 { "edge": {
+                    "class": "PossiedeCasiRegione",
+		     "joinFieldName": "denominazione_regione",
+		     "lookup": "Regione.name",
+		     "direction": "in",
+		     "unresolvedLinkAction": "CREATE"} }
+  ],
+  "loader": {
+    "orientdb": {
+        "dbURL": "plocal:/home/fabiano/orientdb-3.1.0/databases/BigData",
+        "dbUser": "admin",
+         "dbPassword": "admin",
+	 "dbAutoDropIfExists": false,
+         "dbAutoCreate": true,
+         "dbType": "graph",
+         "classes": [
+	  {"name": "Caso", "extends": "V"},
+          {"name": "Regione", "extends": "V"},
+          {"name": "Provincia", "extends": "V"},
+          {"name": "Possiede", "extends": "E"}
+       ],
+	 "indexes": [{"class":"Caso", "fields":["totale_casi:integer"], "type":"UNIQUE_HASH_INDEX" }]
+    }
+  }
+}
