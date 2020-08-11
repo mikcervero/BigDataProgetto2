@@ -23,14 +23,11 @@
       "dbURL": "plocal:/home/fabiano/orientdb-3.1.0/databases/BigData",
       "dbUser": "admin",
       "dbPassword": "admin",
-      "dbAutoDropIfExists": false,
+      "dbAutoDropIfExists": true,
       "dbAutoCreate": true,
-      "standardElementConstraints": false,
-      "tx": false,
-      "wal": false,
-      "batchCommit": 1000,
       "dbType": "graph",
-      "classes": [{"name": "Regione", "extends":"V"}, {"name": "Confina", "extends":"E"}]
+      "classes": [{"name": "Regione", "extends":"V"}, {"name": "Confina", "extends":"E"}],
+      "indexes": [{"class":"Regione", "fields":["name:string"], "type":"UNIQUE_HASH_INDEX" }]
     }
   }
 }
