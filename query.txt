@@ -23,3 +23,36 @@ select max(c)-min(c), b  from (match {class:Regione, as:r} -Ha-> {class:Deceduto
 select avg(tamponi)  from (match {class:Regione, as:r} -Ha_effettuato_tamponi-> {class:Tampone, as:t} .outE("alGiornoTamponi"){where:(name=$matched.r.name)}.inV() {class:Data, as:dd, where:(data="2020-05-03 00:00:00")} return distinct t.tamponi as tamponi, dd.data) //GIUSTA
 
 select sum(somma)/sum(casi) from (select min(casi)*min(tamponi) as somma, sum(casi) as casi from (select expand($c) let $a = (select from (match {class:Regione, as:r} -PossiedeCasiRegione-> {class:Caso, as:c} .outE("alGiornoCasi"){where:(name=$matched.r.name)}.inV() {class:Data, as:dd, where:(data="2020-05-03 00:00:00")} return distinct r.name as nregione, c.totale_casi as casi, dd.data)), $b = (select from (match {class:Regione, as:r} -Ha_effettuato_tamponi-> {class:Tampone, as:t} .outE("alGiornoTamponi"){where:(name=$matched.r.name)}.inV() {class:Data, as:dd, where:(data="2020-05-03 00:00:00")} return distinct r.name as nregione, t.tamponi as tamponi, dd.data)), $c = unionall($a,$b)) group by nregione)
+
+select ((max(tot)-min(tot))/min(tot))*100 as variazione_percentuale, d as data from (match {class:Provincia, as:pp, where:(name="Napoli")} -Possiede-> {class:Caso, as:c} .outE("alGiorno"){where:(name='Napoli')}.inV() {class:Data, as:dd, where:(data="2020-03-08 00:00:00" or data="2020-03-23")} return distinct pp.name as b,c.totale_casi as tot,dd.data as d) group by b
+
+select ((max(tot)-min(tot))/1)*100 as variazione_percentuale, d as data from (match {class:Provincia, as:pp, where:(name="Napoli")} -Possiede-> {class:Caso, as:c} .outE("alGiorno"){where:(name='Napoli')}.inV() {class:Data, as:dd, where:(data="2020-02-24 00:00:00" or data="2020-03-07")} return distinct pp.name as b,c.totale_casi as tot,dd.data as d) group by b
+
+select ((max(tot)-min(tot))/min(tot))*100 as variazione_percentuale, d as data from (match {class:Provincia, as:pp, where:(name="Palermo")} -Possiede-> {class:Caso, as:c} .outE("alGiorno"){where:(name='Palermo')}.inV() {class:Data, as:dd, where:(data="2020-03-08 00:00:00" or data="2020-03-23")} return distinct pp.name as b,c.totale_casi as tot,dd.data as d) group by b
+
+select ((max(tot)-min(tot))/1)*100 as variazione_percentuale, d as data from (match {class:Provincia, as:pp, where:(name="Palermo")} -Possiede-> {class:Caso, as:c} .outE("alGiorno"){where:(name='Palermo')}.inV() {class:Data, as:dd, where:(data="2020-02-24 00:00:00" or data="2020-03-07")} return distinct pp.name as b,c.totale_casi as tot,dd.data as d) group by b
+
+select ((max(tot)-min(tot))/min(tot))*100 as variazione_percentuale, d as data from (match {class:Provincia, as:pp, where:(name="Caserta")} -Possiede-> {class:Caso, as:c} .outE("alGiorno"){where:(name='Caserta')}.inV() {class:Data, as:dd, where:(data="2020-03-08 00:00:00" or data="2020-03-23")} return distinct pp.name as b,c.totale_casi as tot,dd.data as d) group by b
+
+select ((max(tot)-min(tot))/1)*100 as variazione_percentuale, d as data from (match {class:Provincia, as:pp, where:(name="Caserta")} -Possiede-> {class:Caso, as:c} .outE("alGiorno"){where:(name='Caserta')}.inV() {class:Data, as:dd, where:(data="2020-02-24 00:00:00" or data="2020-03-07")} return distinct pp.name as b,c.totale_casi as tot,dd.data as d) group by b
+
+select ((max(tot)-min(tot))/min(tot))*100 as variazione_percentuale, d as data from (match {class:Provincia, as:pp, where:(name="Lecce")} -Possiede-> {class:Caso, as:c} .outE("alGiorno"){where:(name='Lecce')}.inV() {class:Data, as:dd, where:(data="2020-03-08 00:00:00" or data="2020-03-23")} return distinct pp.name as b,c.totale_casi as tot,dd.data as d) group by b
+
+select ((max(tot)-min(tot))/1)*100 as variazione_percentuale, d as data from (match {class:Provincia, as:pp, where:(name="Lecce")} -Possiede-> {class:Caso, as:c} .outE("alGiorno"){where:(name='Lecce')}.inV() {class:Data, as:dd, where:(data="2020-02-24 00:00:00" or data="2020-03-07")} return distinct pp.name as b,c.totale_casi as tot,dd.data as d) group by b
+
+select ((max(tot)-min(tot))/min(tot))*100 as variazione_percentuale, d as data from (match {class:Provincia, as:pp, where:(name="Teramo")} -Possiede-> {class:Caso, as:c} .outE("alGiorno"){where:(name='Teramo')}.inV() {class:Data, as:dd, where:(data="2020-03-08 00:00:00" or data="2020-03-23")} return distinct pp.name as b,c.totale_casi as tot,dd.data as d) group by b
+
+select ((max(tot)-min(tot))/1)*100 as variazione_percentuale, d as data from (match {class:Provincia, as:pp, where:(name="Teramo")} -Possiede-> {class:Caso, as:c} .outE("alGiorno"){where:(name='Teramo')}.inV() {class:Data, as:dd, where:(data="2020-02-24 00:00:00" or data="2020-03-07")} return distinct pp.name as b,c.totale_casi as tot,dd.data as d) group by b
+
+select ((max(tot)-min(tot))/min(tot))*100 as variazione_percentuale, d as data from (match {class:Provincia, as:pp, where:(name="Catania")} -Possiede-> {class:Caso, as:c} .outE("alGiorno"){where:(name='Catania')}.inV() {class:Data, as:dd, where:(data="2020-03-08 00:00:00" or data="2020-03-23")} return distinct pp.name as b,c.totale_casi as tot,dd.data as d) group by b
+
+select ((max(tot)-min(tot))/1)*100 as variazione_percentuale, d as data from (match {class:Provincia, as:pp, where:(name="Catania")} -Possiede-> {class:Caso, as:c} .outE("alGiorno"){where:(name='Catania')}.inV() {class:Data, as:dd, where:(data="2020-02-24 00:00:00" or data="2020-03-07")} return distinct pp.name as b,c.totale_casi as tot,dd.data as d) group by b
+
+select ((max(tot)-min(tot))/min(tot))*100 as variazione_percentuale, d as data from (match {class:Provincia, as:pp, where:(name="Bari")} -Possiede-> {class:Caso, as:c} .outE("alGiorno"){where:(name='Bari')}.inV() {class:Data, as:dd, where:(data="2020-03-08 00:00:00" or data="2020-03-23")} return distinct pp.name as b,c.totale_casi as tot,dd.data as d) group by b
+
+select ((max(tot)-min(tot))/1)*100 as variazione_percentuale, d as data from (match {class:Provincia, as:pp, where:(name="Bari")} -Possiede-> {class:Caso, as:c} .outE("alGiorno"){where:(name='Bari')}.inV() {class:Data, as:dd, where:(data="2020-02-24 00:00:00" or data="2020-03-07")} return distinct pp.name as b,c.totale_casi as tot,dd.data as d) group by b
+
+select ((max(tot)-min(tot))/1)*100 as variazione_percentuale, d as data from (match {class:Provincia, as:pp, where:(name="Vibo Valentia")} -Possiede-> {class:Caso, as:c} .outE("alGiorno"){where:(name='Vibo Valentia')}.inV() {class:Data, as:dd, where:(data="2020-03-08 00:00:00" or data="2020-03-23")} return distinct pp.name as b,c.totale_casi as tot,dd.data as d) group by b
+
+select ((max(tot)-min(tot))/1)*100 as variazione_percentuale, d as data from (match {class:Provincia, as:pp, where:(name="Vibo Valentia")} -Possiede-> {class:Caso, as:c} .outE("alGiorno"){where:(name='Vibo Valentia')}.inV() {class:Data, as:dd, where:(data="2020-02-24 00:00:00" or data="2020-03-07")} return distinct pp.name as b,c.totale_casi as tot,dd.data as d) group by b
+
