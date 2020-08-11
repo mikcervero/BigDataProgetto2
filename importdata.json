@@ -10,7 +10,6 @@
                     "class": "alGiorno",
 		     "joinFieldName": "totale_casi",
 		     "lookup": "Caso.totale_casi",
-		     "skipDuplicates":true,
 		     "edgeFields": { "name": "${input.denominazione_provincia}" },
 		     "direction": "in",
 		     "unresolvedLinkAction": "CREATE"} }
