@@ -1,0 +1,32 @@
+{
+  "config": {
+    "log": "debug"},
+  "source": { "file": { "path": "/home/fabiano/dpc-covid19-ita-regioni.csv" } },
+  "extractor": { "csv": {} },
+  "transformers": [
+	 { "merge": { "joinFieldName": "data", "lookup": "Data.data" } },	 
+         { "vertex": { "class": "Data" } },
+	 { "edge": {
+                    "class": "alGiornoCasi",
+		     "joinFieldName": "totale_casi",
+		     "lookup": "Caso.totale_casi",
+		     "edgeFields": { "name": "${input.denominazione_regione}" },
+		     "direction": "in",
+		     "unresolvedLinkAction": "CREATE"} },
+  ],
+  "loader": {
+    "orientdb": {
+        "dbURL": "plocal:/home/fabiano/orientdb-3.1.0/databases/BigData",
+        "dbUser": "admin",
+         "dbPassword": "admin",
+	 "dbAutoDropIfExists": false,
+         "dbAutoCreate": true,
+         "dbType": "graph",
+         "classes": [
+	  {"name": "Data", "extends": "V"},
+	  {"name": "alGiorno", "extends": "E"}
+       ],
+	 "indexes": [{"class":"Data", "fields":["data:datetime","in:any","out:any"], "type":"UNIQUE_HASH_INDEX" }]
+    }
+  }
+}
