@@ -1,0 +1,130 @@
+Creazione grafo
+
+CREATE CONSTRAINT ON (numero:Numero) ASSERT numero.value IS UNIQUE -->  135 ms 
+
+CREATE CONSTRAINT ON (data:Data) ASSERT data.value IS UNIQUE -->  164 ms 
+
+CREATE CONSTRAINT ON (regione:Regione) ASSERT regione.name IS UNIQUE -->  133 ms 
+
+CREATE CONSTRAINT ON (provincia:Provincia) ASSERT provincia.name IS UNIQUE -->  614 ms 
+
+
+
+CALL apoc.load.json("file:///regioni.json") YIELD value AS v
+MERGE (r:Regione {name: v.name})
+FOREACH (n IN v.neighbors |
+  MERGE (neighbor:Regione {name: n})
+  MERGE (r)-[:CONFINA_CON]-(neighbor)
+)
+
+ -->  8 ms 
+
+CALL apoc.load.json("file:///province.json") YIELD value AS v
+MERGE (provincia:Provincia {name: v.name})
+FOREACH (n IN v.neighbors |
+  MERGE (neighbor:Provincia {name: n})
+  MERGE (provincia)-[:CONFINA_CON]-(neighbor)
+)
+
+-->  18 ms
+
+
+CALL apoc.load.json("file:///province.json") YIELD value AS v
+MATCH (provincia:Provincia {name:v.name}),(regione:Regione {name:v.regione})
+MERGE (provincia)-[:PROVINCIA_DI]->(regione)
+
+-->  8 ms
+
+LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-province.csv" AS csvLine
+MATCH (provincia:Provincia { name: csvLine.denominazione_provincia })
+SET provincia.sigla = csvLine.sigla_provincia,provincia.latidudine = csvLine.lat,provincia.longitudine = csvLine.long
+
+-->  123 ms
+
+LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-province.csv" AS csvLine 
+MERGE (data:Data {value: csvLine.data })
+
+--> 72 ms
+
+LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-province.csv" AS csvLine 
+MERGE (numero:Numero {value: toInteger(csvLine.totale_casi)})
+
+-->  396 ms
+
+
+LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-province.csv" AS csvLine
+MATCH (provincia:Provincia {name: csvLine.denominazione_provincia}),(numero:Numero {value: toInteger(csvLine.totale_casi)})
+MERGE (provincia)-[:POSSIEDE_POSITIVI]->(numero)
+
+-->  365 ms
+
+
+LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-province.csv" AS csvLine
+MATCH (data:Data {value:csvLine.data}),(numero:Numero {value: toInteger(csvLine.totale_casi)}),(provincia:Provincia{name:csvLine.denominazione_provincia})
+MERGE (numero)-[:POSITIVI_NEL_GIORNO{value:provincia.name}]->(data)
+
+-->  620 ms
+
+LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-regioni.csv" AS csvLine
+MATCH (regione:Regione { name: csvLine.denominazione_regione })
+SET regione.latidudine = csvLine.lat,regione.longitudine = csvLine.long
+
+-->  28 ms
+
+
+LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-regioni.csv" AS csvLine 
+MERGE (data:Data {value: csvLine.data })
+
+-->  31 ms
+
+LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-regioni.csv" AS csvLine 
+MERGE (positivi:Positivi {value: toInteger(csvLine.totale_casi)})
+
+-->  61 ms
+
+LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-regioni.csv" AS csvLine 
+MERGE (numero:Numero {value: toInteger(csvLine.tamponi)})
+
+-->  109 ms
+
+LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-regioni.csv" AS csvLine
+MATCH (regione:Regione {name: csvLine.denominazione_regione}),(numero:Numero {value: toInteger(csvLine.totale_casi)})
+MERGE (regione)-[:POSSIEDE_POSITIVI]->(numero)
+
+-->  167 ms
+
+
+LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-regioni.csv" AS csvLine
+MATCH (data:Data {value:csvLine.data}),(numero: Numero {value: toInteger(csvLine.totale_casi)}),(regione:Regione{name:csvLine.denominazione_regione})
+MERGE (numero)-[:POSITIVI_NEL_GIORNO{value:regione.name}]->(data)
+
+-->  383 ms
+
+LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-regioni.csv" AS csvLine
+MATCH (regione:Regione {name: csvLine.denominazione_regione}),(numero:Numero {value: toInteger(csvLine.tamponi)})
+MERGE (regione)-[:HA_EFFETTUATO_TAMPONI]->(numero)
+
+-->  131 ms
+
+LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-regioni.csv" AS csvLine
+MATCH (data:Data {value:csvLine.data}),(numero:Numero {value: toInteger(csvLine.tamponi)}),(regione:Regione{name:csvLine.denominazione_regione})
+MERGE (numero)-[:TAMPONE_NEL_GIORNO{value:regione.name}]->(data)
+
+-->  148 ms
+
+LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-regioni.csv" AS csvLine
+MATCH (regione:Regione {name: csvLine.denominazione_regione}),(numero:Numero {value: toInteger(csvLine.deceduti)})
+MERGE (regione)-[:POSSIEDE_DECEDUTI]->(numero)
+
+-->  104 ms
+
+LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-regioni.csv" AS csvLine
+MATCH (data:Data {value:csvLine.data}),(numero:Numero {value: toInteger(csvLine.deceduti)}),(regione:Regione{name:csvLine.denominazione_regione})
+MERGE (numero)-[:DECEDUTI_NEL_GIORNO{value:regione.name}]->(data)
+
+-->  157 ms
+
+
+totale 3975 ms --> 4 s
+
+
