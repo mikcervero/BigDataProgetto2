@@ -54,14 +54,14 @@ MERGE (numero:Numero {value: toInteger(csvLine.totale_casi)})
 
 LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-province.csv" AS csvLine
 MATCH (provincia:Provincia {name: csvLine.denominazione_provincia}),(numero:Numero {value: toInteger(csvLine.totale_casi)})
-MERGE (provincia)-[:POSSIEDE_POSITIVI_POSITIVI]->(numero)
+MERGE (provincia)-[:PROV_POSSIEDE_POSITIVI]->(numero)
 
 -->  365 ms
 
 
 LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-province.csv" AS csvLine
 MATCH (data:Data {value:csvLine.data}),(numero:Numero {value: toInteger(csvLine.totale_casi)}),(provincia:Provincia{name:csvLine.denominazione_provincia})
-MERGE (numero)-[:POSITIVI_NEL_GIORNO{value:provincia.name}]->(data)
+MERGE (numero)-[:POSITIVI_PROV_NEL_GIORNO{value:provincia.name}]->(data)
 
 -->  620 ms
 
@@ -89,14 +89,14 @@ MERGE (numero:Numero {value: toInteger(csvLine.tamponi)})
 
 LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-regioni.csv" AS csvLine
 MATCH (regione:Regione {name: csvLine.denominazione_regione}),(numero:Numero {value: toInteger(csvLine.totale_casi)})
-MERGE (regione)-[:POSSIEDE_POSITIVI_POSITIVI]->(numero)
+MERGE (regione)-[:REG_POSSIEDE_POSITIVI]->(numero)
 
 -->  167 ms
 
 
 LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-regioni.csv" AS csvLine
 MATCH (data:Data {value:csvLine.data}),(numero: Numero {value: toInteger(csvLine.totale_casi)}),(regione:Regione{name:csvLine.denominazione_regione})
-MERGE (numero)-[:POSITIVI_NEL_GIORNO{value:regione.name}]->(data)
+MERGE (numero)-[:POSITIVI_REG_NEL_GIORNO{value:regione.name}]->(data)
 
 -->  383 ms
 
@@ -114,7 +114,7 @@ MERGE (numero)-[:TAMPONE_NEL_GIORNO{value:regione.name}]->(data)
 
 LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-regioni.csv" AS csvLine
 MATCH (regione:Regione {name: csvLine.denominazione_regione}),(numero:Numero {value: toInteger(csvLine.deceduti)})
-MERGE (regione)-[:POSSIEDE_POSITIVI_DECEDUTI]->(numero)
+MERGE (regione)-[:POSSIEDE_DECEDUTI]->(numero)
 
 -->  104 ms
 
@@ -130,11 +130,85 @@ totale 3975 ms --> 4 s
 
 Query
 
-match (n:Numero)-[:POSSIEDE_POSITIVI]-(p:Provincia) with p,max(n.value) as mx return p.name AS provincia,mx AS positivi order by mx DESC
+match (n:Numero)-[:POSSIEDE_POSITIVI]-(p:Provincia) with p,max(n.value) as mx return p.name AS provincia,mx AS positivi order by mx DESC LIMIT 5
 
 -->  19 ms
 
-match (n:Numero)-[:HA_EFFETTUATO_TAMPONI]-(r:Regione) with r,max(n.value) as mxt match (n:Numero)-[:POSSIEDE_POSITIVI_POSITIVI]-(r:Regione) with r,max(n.value) as mx, mxt  return r.name as regione , mx as positivi,mxt as tamponi order by mx DESC Limit 5
+MATCH (start:Provincia {name: 'Milano'}), (end:Provincia {name: 'Torino'})
+CALL gds.alpha.shortestPath.write({
+  nodeProjection: 'Provincia',
+  relationshipProjection: {
+    CONFINA_CON: {
+      type: 'CONFINA_CON',
+      properties: 'cost',
+      orientation: 'UNDIRECTED'
+    }
+  },
+  startNode: start,
+  endNode: end,
+  relationshipWeightProperty: 'cost',
+  writeProperty: 'sssp'
+})
+YIELD nodeCount, totalCost
+RETURN start.name as start, end.name as end,nodeCount,totalCost
+UNION
+MATCH (start:Provincia {name: 'Milano'}), (end:Provincia {name: 'Brescia'})
+CALL gds.alpha.shortestPath.write({
+  nodeProjection: 'Provincia',
+  relationshipProjection: {
+    CONFINA_CON: {
+      type: 'CONFINA_CON',
+      properties: 'cost',
+      orientation: 'UNDIRECTED'
+    }
+  },
+  startNode: start,
+  endNode: end,
+  relationshipWeightProperty: 'cost',
+  writeProperty: 'sssp'
+})
+YIELD nodeCount, totalCost
+RETURN start.name as start, end.name as end,nodeCount,totalCost
+UNION
+MATCH (start:Provincia {name: 'Milano'}), (end:Provincia {name: 'Bergamo'})
+CALL gds.alpha.shortestPath.write({
+  nodeProjection: 'Provincia',
+  relationshipProjection: {
+    CONFINA_CON: {
+      type: 'CONFINA_CON',
+      properties: 'cost',
+      orientation: 'UNDIRECTED'
+    }
+  },
+  startNode: start,
+  endNode: end,
+  relationshipWeightProperty: 'cost',
+  writeProperty: 'sssp'
+})
+YIELD nodeCount, totalCost
+RETURN start.name as start, end.name as end,nodeCount,totalCost
+UNION
+MATCH (start:Provincia {name: 'Milano'}), (end:Provincia {name: 'Cremona'})
+CALL gds.alpha.shortestPath.write({
+  nodeProjection: 'Provincia',
+  relationshipProjection: {
+    CONFINA_CON: {
+      type: 'CONFINA_CON',
+      properties: 'cost',
+      orientation: 'UNDIRECTED'
+    }
+  },
+  startNode: start,
+  endNode: end,
+  relationshipWeightProperty: 'cost',
+  writeProperty: 'sssp'
+})
+YIELD nodeCount, totalCost
+RETURN start.name as start, end.name as end,nodeCount,totalCost
+
+-->  6231 ms
+
+match (n:Numero)-[:HA_EFFETTUATO_TAMPONI]-(r:Regione) with r,max(n.value) as mxt match (n:Numero)-[:POSSIEDE_POSITIVI]-(r:Regione) with r,max(n.value) as mx, mxt  return r.name as regione , mx as positivi,mxt as tamponi order by mx DESC Limit 5
 
 -->  15 ms
 
@@ -146,16 +220,24 @@ return r.name as regione,mx as deceduti_totali,gmx as positivi_totali,data order
 
 -->  8 ms
 
-match (d:Data)-[:POSITIVI_NEL_GIORNO{value:r.name}]-(g:Numero)-[:POSSIEDE_POSITIVI]-(r:Regione)-[:POSSIEDE_POSITIVI_DECEDUTI]-(p:Positivi)-[:DECEDUTI_NEL_GIORNO{value:r.name}]-(d:Data)
+match (r:Regione)-[:POSSIEDE_DECEDUTI]-(p:Numero)-[:DECEDUTI_NEL_GIORNO{value:r.name}]-(d:Data)
 where d.value='2020-05-03'
-with r,p.value as valore_fase1,g.value as positivi_fase1 
-match (d:Data)-[:POSITIVI_NEL_GIORNO{value:r.name}]-(q:Numero)-[:POSSIEDE_POSITIVI]-(r:Regione)-[:POSSIEDE_POSITIVI_DECEDUTI]-(n:Positivi)-[:DECEDUTI_NEL_GIORNO{value:r.name}]-(d:Data)
+with r,p.value as valore_fase1,d.value as data 
+match (r:Regione)-[:POSSIEDE_DECEDUTI]-(n:Numero)-[:DECEDUTI_NEL_GIORNO{value:r.name}]-(d:Data)
 where d.value='2020-06-15'
-with r,n.value-valore_fase1 as valore_fase2,d.value as data,q.value-positivi_fase1 as positivi_fase2
-return positivi_fase2,valore_fase2 as deceduti_totali_fase2,r.name as regione,data 
-order by deceduti_totali_fase2 DESC 
+with r,n.value-valore_fase1 as valore_fase2,d.value as data
+match (r:Regione)-[:REG_POSSIEDE_POSITIVI]-(p:Numero)-[:POSITIVI_REG_NEL_GIORNO{value:r.name}]-(d:Data)
+where d.value='2020-05-03'
+with r,valore_fase2,p.value as positivi_fase1 
+match (r:Regione)-[:REG_POSSIEDE_POSITIVI]-(n:Numero)-[:POSITIVI_REG_NEL_GIORNO{value:r.name}]-(d:Data)
+where d.value='2020-06-15'
+with r,valore_fase2,n.value-positivi_fase1 as positivi_fase2,d.value as data
+return r.name as regione,positivi_fase2 as positivi_totali_fase,valore_fase2 as deceduti_totali_fase2,data 
+order by deceduti_totali_fase2 DESC
 
-///NON VIENE
+-->  56 ms
+
+
 
 match (n:Numero)-[:TAMPONE_NEL_GIORNO]-(d:Data) where d.value='2020-04-28' return sum(n.value) as somma_tamponi,d.value as data
 UNION match (r:Regione)-[:HA_EFFETTUATO_TAMPONI]-(p:Numero)-[:TAMPONE_NEL_GIORNO{value:r.name}]-(d:Data)
@@ -168,11 +250,11 @@ return sum(valore_fase2) as somma_tamponi,data
 
 -->  16 ms
 
-match (r:Regione)-[:POSSIEDE_POSITIVI_POSITIVI]-(n: Numero)-[:POSITIVI_NEL_GIORNO{value:r.name}]-(d:Data) where d.value='2020-05-03' return sum(n.value) as somma_positivi,d.value as data
-UNION match (r:Regione)-[:POSSIEDE_POSITIVI_POSITIVI]-(p:Numero)-[:POSITIVI_NEL_GIORNO{value:r.name}]-(d:Data)
+match (r:Regione)-[:POSSIEDE_POSITIVI]-(n: Numero)-[:POSITIVI_NEL_GIORNO{value:r.name}]-(d:Data) where d.value='2020-05-03' return sum(n.value) as somma_positivi,d.value as data
+UNION match (r:Regione)-[:POSSIEDE_POSITIVI]-(p:Numero)-[:POSITIVI_NEL_GIORNO{value:r.name}]-(d:Data)
 where d.value='2020-05-03'
 with r,p.value as valore_fase1 
-match (r:Regione)-[:POSSIEDE_POSITIVI_POSITIVI]-(n:Numero)-[:POSITIVI_NEL_GIORNO{value:r.name}]-(d:Data)
+match (r:Regione)-[:POSSIEDE_POSITIVI]-(n:Numero)-[:POSITIVI_NEL_GIORNO{value:r.name}]-(d:Data)
 where d.value='2020-06-15'
 with r,n.value-valore_fase1 as valore_fase2,d.value as data
 return sum(valore_fase2) as somma_positivi,data
@@ -290,4 +372,4 @@ where d.value="2020-03-23" AND p.name="Vibo Valentia"
 return provincia,((g.value-valore_iniziale)/1)*100 as variazione_percentuale,d.value as data
 
 
---> 22 ms
+--> 47 ms
