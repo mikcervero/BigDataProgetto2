@@ -130,7 +130,7 @@ totale 3975 ms --> 4 s
 
 Query
 
-match (n:Numero)-[:POSSIEDE_POSITIVI]-(p:Provincia) with p,max(n.value) as mx return p.name AS provincia,mx AS positivi order by mx DESC LIMIT 5
+match (n:Numero)-[:PROV_POSSIEDE_POSITIVI]-(p:Provincia) with p,max(n.value) as mx return p.name AS provincia,mx AS positivi order by mx DESC LIMIT 5
 
 -->  19 ms
 
@@ -213,7 +213,7 @@ match (n:Numero)-[:HA_EFFETTUATO_TAMPONI]-(r:Regione) with r,max(n.value) as mxt
 -->  15 ms
 
 
-match (d:Data)-[:POSITIVI_NEL_GIORNO{value:r.name}]-(g:Numero)-[:POSSIEDE_POSITIVI]-(r:Regione)-[:POSSIEDE_DECEDUTI]-(p:Numero)-[:DECEDUTI_NEL_GIORNO{value:r.name}]-(d:Data)
+match (d:Data)-[:POSITIVI_REG_NEL_GIORNO{value:r.name}]-(g:Numero)-[:REG_POSSIEDE_POSITIVI]-(r:Regione)-[:POSSIEDE_DECEDUTI]-(p:Numero)-[:DECEDUTI_NEL_GIORNO{value:r.name}]-(d:Data)
 where d.value='2020-05-03'
 with r,p.value as mx,g.value as gmx,d.value as data
 return r.name as regione,mx as deceduti_totali,gmx as positivi_totali,data order by deceduti_totali DESC
@@ -250,126 +250,151 @@ return sum(valore_fase2) as somma_tamponi,data
 
 -->  16 ms
 
-match (r:Regione)-[:POSSIEDE_POSITIVI]-(n: Numero)-[:POSITIVI_NEL_GIORNO{value:r.name}]-(d:Data) where d.value='2020-05-03' return sum(n.value) as somma_positivi,d.value as data
-UNION match (r:Regione)-[:POSSIEDE_POSITIVI]-(p:Numero)-[:POSITIVI_NEL_GIORNO{value:r.name}]-(d:Data)
+match (r:Regione)-[:REG_POSSIEDE_POSITIVI]-(n: Numero)-[:POSITIVI_REG_NEL_GIORNO{value:r.name}]-(d:Data) where d.value='2020-05-03' return sum(n.value) as somma_positivi,d.value as data
+UNION match (r:Regione)-[:REG_POSSIEDE_POSITIVI]-(p:Numero)-[:POSITIVI_REG_NEL_GIORNO{value:r.name}]-(d:Data)
 where d.value='2020-05-03'
 with r,p.value as valore_fase1 
-match (r:Regione)-[:POSSIEDE_POSITIVI]-(n:Numero)-[:POSITIVI_NEL_GIORNO{value:r.name}]-(d:Data)
+match (r:Regione)-[:REG_POSSIEDE_POSITIVI]-(n:Numero)-[:POSITIVI_REG_NEL_GIORNO{value:r.name}]-(d:Data)
 where d.value='2020-06-15'
 with r,n.value-valore_fase1 as valore_fase2,d.value as data
 return sum(valore_fase2) as somma_positivi,data
 
 -->  14 ms
 
-match(d:Data)-[:POSITIVI_NEL_GIORNO{value:"Palermo"}]-(n:Numero)-[:POSSIEDE_POSITIVI]-(p:Provincia) 
+match(d:Data)-[:POSITIVI_PROV_NEL_GIORNO{value:"Palermo"}]-(n:Numero)-[:PROV_POSSIEDE_POSITIVI]-(p:Provincia) 
 where d.value="2020-02-24" AND p.name="Palermo" 
 with n.value as valore_iniziale,p.name as provincia 
-match(d:Data)-[:POSITIVI_NEL_GIORNO{value:"Palermo"}]-(g:Numero)-[:POSSIEDE_POSITIVI]-(p:Provincia) where d.value="2020-03-07" AND p.name=provincia  
+match(d:Data)-[:POSITIVI_PROV_NEL_GIORNO{value:"Palermo"}]-(g:Numero)-[:PROV_POSSIEDE_POSITIVI]-(p:Provincia) where d.value="2020-03-07" AND p.name=provincia  
 return provincia,((g.value-valore_iniziale)/1)*100 as variazione_percentuale,d.value as data 
 UNION 
-match(d:Data)-[:POSITIVI_NEL_GIORNO{value:"Palermo"}]-(n:Numero)-[:POSSIEDE_POSITIVI]-(p:Provincia) 
+match(d:Data)-[:POSITIVI_PROV_NEL_GIORNO{value:"Palermo"}]-(n:Numero)-[:PROV_POSSIEDE_POSITIVI]-(p:Provincia) 
 where d.value="2020-03-08" AND p.name="Palermo" 
 with n.value as valore_iniziale,p.name as provincia 
-match(d:Data)-[:POSITIVI_NEL_GIORNO{value:"Palermo"}]-(g:Numero)-[:POSSIEDE_POSITIVI]-(p:Provincia) 
+match(d:Data)-[:POSITIVI_PROV_NEL_GIORNO{value:"Palermo"}]-(g:Numero)-[:PROV_POSSIEDE_POSITIVI]-(p:Provincia) 
 where d.value="2020-03-23" AND p.name="Palermo"  
 return provincia,((g.value-valore_iniziale)/valore_iniziale)*100 as variazione_percentuale,d.value as data 
 UNION
-match(d:Data)-[:POSITIVI_NEL_GIORNO{value:"Caserta"}]-(n:Numero)-[:POSSIEDE_POSITIVI]-(p:Provincia) 
+match(d:Data)-[:POSITIVI_PROV_NEL_GIORNO{value:"Caserta"}]-(n:Numero)-[:PROV_POSSIEDE_POSITIVI]-(p:Provincia) 
 where d.value="2020-02-24" AND p.name="Caserta" 
 with n.value as valore_iniziale,p.name as provincia 
-match(d:Data)-[:POSITIVI_NEL_GIORNO{value:"Caserta"}]-(g:Numero)-[:POSSIEDE_POSITIVI]-(p:Provincia) where d.value="2020-03-07" AND p.name=provincia  
+match(d:Data)-[:POSITIVI_PROV_NEL_GIORNO{value:"Caserta"}]-(g:Numero)-[:PPROV_OSSIEDE_POSITIVI]-(p:Provincia) where d.value="2020-03-07" AND p.name=provincia  
 return provincia,((g.value-valore_iniziale)/1)*100 as variazione_percentuale,d.value as data 
 UNION 
-match(d:Data)-[:POSITIVI_NEL_GIORNO{value:"Caserta"}]-(n:Numero)-[:POSSIEDE_POSITIVI]-(p:Provincia) 
+match(d:Data)-[:POSITIVI_PROV_NEL_GIORNO{value:"Caserta"}]-(n:Numero)-[:PROV_POSSIEDE_POSITIVI]-(p:Provincia) 
 where d.value="2020-03-08" AND p.name="Caserta" 
 with n.value as valore_iniziale,p.name as provincia 
-match(d:Data)-[:POSITIVI_NEL_GIORNO{value:"Caserta"}]-(g:Numero)-[:POSSIEDE_POSITIVI]-(p:Provincia) 
+match(d:Data)-[:POSITIVI_PROV_NEL_GIORNO{value:"Caserta"}]-(g:Numero)-[:PROV_POSSIEDE_POSITIVI]-(p:Provincia) 
 where d.value="2020-03-23" AND p.name="Caserta"  
 return provincia,((g.value-valore_iniziale)/valore_iniziale)*100 as variazione_percentuale,d.value as data
 UNION 
-match(d:Data)-[:POSITIVI_NEL_GIORNO{value:"Napoli"}]-(n:Numero)-[:POSSIEDE_POSITIVI]-(p:Provincia) 
+match(d:Data)-[:POSITIVI_PROV_NEL_GIORNO{value:"Napoli"}]-(n:Numero)-[:POSSIEDE_POSITIVI]-(p:Provincia) 
 where d.value="2020-02-24" AND p.name="Napoli" 
 with n.value as valore_iniziale,p.name as provincia 
-match(d:Data)-[:POSITIVI_NEL_GIORNO{value:"Napoli"}]-(g:Numero)-[:POSSIEDE_POSITIVI]-(p:Provincia) 
+match(d:Data)-[:POSITIVI_PROV_NEL_GIORNO{value:"Napoli"}]-(g:Numero)-[:POSSIEDE_POSITIVI]-(p:Provincia) 
 where d.value="2020-03-07" AND p.name=provincia  
 return provincia,((g.value-valore_iniziale)/1)*100 as variazione_percentuale,d.value as data 
 UNION 
-match(d:Data)-[:POSITIVI_NEL_GIORNO{value:"Napoli"}]-(n:Numero)-[:POSSIEDE_POSITIVI]-(p:Provincia) 
+match(d:Data)-[:POSITIVI_PROV_NEL_GIORNO{value:"Napoli"}]-(n:Numero)-[:PROV_POSSIEDE_POSITIVI]-(p:Provincia) 
 where d.value="2020-03-08" AND p.name="Napoli" 
 with n.value as valore_iniziale,p.name as provincia 
-match(d:Data)-[:POSITIVI_NEL_GIORNO{value:"Napoli"}]-(g:Numero)-[:POSSIEDE_POSITIVI]-(p:Provincia) 
+match(d:Data)-[:POSITIVI_PROV_NEL_GIORNO{value:"Napoli"}]-(g:Numero)-[:PROV_POSSIEDE_POSITIVI]-(p:Provincia) 
 where d.value="2020-03-23" AND p.name="Napoli"  
 return provincia,((g.value-valore_iniziale)/valore_iniziale)*100 as variazione_percentuale,d.value as data
 UNION 
-match(d:Data)-[:POSITIVI_NEL_GIORNO{value:"Lecce"}]-(n:Numero)-[:POSSIEDE_POSITIVI]-(p:Provincia) 
+match(d:Data)-[:POSITIVI_PROV_NEL_GIORNO{value:"Lecce"}]-(n:Numero)-[:PROV_POSSIEDE_POSITIVI]-(p:Provincia) 
 where d.value="2020-02-24" AND p.name="Lecce" 
 with n.value as valore_iniziale,p.name as provincia 
-match(d:Data)-[:POSITIVI_NEL_GIORNO{value:"Lecce"}]-(g:Numero)-[:POSSIEDE_POSITIVI]-(p:Provincia) 
+match(d:Data)-[:POSITIVI_PROV_NEL_GIORNO{value:"Lecce"}]-(g:Numero)-[:PROV_POSSIEDE_POSITIVI]-(p:Provincia) 
 where d.value="2020-03-07" AND p.name=provincia  
 return provincia,((g.value-valore_iniziale)/1)*100 as variazione_percentuale,d.value as data 
 UNION 
-match(d:Data)-[:POSITIVI_NEL_GIORNO{value:"Lecce"}]-(n:Numero)-[:POSSIEDE_POSITIVI]-(p:Provincia) 
+match(d:Data)-[:POSITIVI_PROV_NEL_GIORNO{value:"Lecce"}]-(n:Numero)-[:PROV_POSSIEDE_POSITIVI]-(p:Provincia) 
 where d.value="2020-03-08" AND p.name="Lecce" 
 with n.value as valore_iniziale,p.name as provincia 
-match(d:Data)-[:POSITIVI_NEL_GIORNO{value:"Lecce"}]-(g:Numero)-[:POSSIEDE_POSITIVI]-(p:Provincia) 
+match(d:Data)-[:POSITIVI_PROV_NEL_GIORNO{value:"Lecce"}]-(g:Numero)-[:PROV_POSSIEDE_POSITIVI]-(p:Provincia) 
 where d.value="2020-03-23" AND p.name="Lecce"  
 return provincia,((g.value-valore_iniziale)/valore_iniziale)*100 as variazione_percentuale,d.value as data
 UNION 
-match(d:Data)-[:POSITIVI_NEL_GIORNO{value:"Teramo"}]-(n:Numero)-[:POSSIEDE_POSITIVI]-(p:Provincia) 
+match(d:Data)-[:POSITIVI_PROV_NEL_GIORNO{value:"Teramo"}]-(n:Numero)-[:PROV_POSSIEDE_POSITIVI]-(p:Provincia) 
 where d.value="2020-02-24" AND p.name="Teramo" 
 with n.value as valore_iniziale,p.name as provincia 
-match(d:Data)-[:POSITIVI_NEL_GIORNO{value:"Teramo"}]-(g:Numero)-[:POSSIEDE_POSITIVI]-(p:Provincia) 
+match(d:Data)-[:POSITIVI_PROV_NEL_GIORNO{value:"Teramo"}]-(g:Numero)-[:PROV_POSSIEDE_POSITIVI]-(p:Provincia) 
 where d.value="2020-03-07" AND p.name=provincia  
 return provincia,((g.value-valore_iniziale)/1)*100 as variazione_percentuale,d.value as data 
 UNION 
-match(d:Data)-[:POSITIVI_NEL_GIORNO{value:"Teramo"}]-(n:Numero)-[:POSSIEDE_POSITIVI]-(p:Provincia) 
+match(d:Data)-[:POSITIVI_PROV_NEL_GIORNO{value:"Teramo"}]-(n:Numero)-[:PROV_POSSIEDE_POSITIVI]-(p:Provincia) 
 where d.value="2020-03-08" AND p.name="Teramo" 
 with n.value as valore_iniziale,p.name as provincia 
-match(d:Data)-[:POSITIVI_NEL_GIORNO{value:"Teramo"}]-(g:Numero)-[:POSSIEDE_POSITIVI]-(p:Provincia) 
+match(d:Data)-[:POSITIVI_PROV_NEL_GIORNO{value:"Teramo"}]-(g:Numero)-[:PROV_POSSIEDE_POSITIVI]-(p:Provincia) 
 where d.value="2020-03-23" AND p.name="Teramo"  
 return provincia,((g.value-valore_iniziale)/valore_iniziale)*100 as variazione_percentuale,d.value as data
 UNION 
-match(d:Data)-[:POSITIVI_NEL_GIORNO{value:"Catania"}]-(n:Numero)-[:POSSIEDE_POSITIVI]-(p:Provincia) 
+match(d:Data)-[:POSITIVI_PROV_NEL_GIORNO{value:"Catania"}]-(n:Numero)-[:PROV_POSSIEDE_POSITIVI]-(p:Provincia) 
 where d.value="2020-02-24" AND p.name="Catania" 
 with n.value as valore_iniziale,p.name as provincia 
-match(d:Data)-[:POSITIVI_NEL_GIORNO{value:"Catania"}]-(g:Numero)-[:POSSIEDE_POSITIVI]-(p:Provincia) 
+match(d:Data)-[:POSITIVI_PROV_NEL_GIORNO{value:"Catania"}]-(g:Numero)-[:PROV_POSSIEDE_POSITIVI]-(p:Provincia) 
 where d.value="2020-03-07" AND p.name=provincia  
 return provincia,((g.value-valore_iniziale)/1)*100 as variazione_percentuale,d.value as data 
 UNION 
-match(d:Data)-[:POSITIVI_NEL_GIORNO{value:"Catania"}]-(n:Numero)-[:POSSIEDE_POSITIVI]-(p:Provincia) 
+match(d:Data)-[:POSITIVI_PROV__NEL_GIORNO{value:"Catania"}]-(n:Numero)-[:PROV_POSSIEDE_POSITIVI]-(p:Provincia) 
 where d.value="2020-03-08" AND p.name="Catania" 
 with n.value as valore_iniziale,p.name as provincia 
-match(d:Data)-[:POSITIVI_NEL_GIORNO{value:"Catania"}]-(g:Numero)-[:POSSIEDE_POSITIVI]-(p:Provincia) 
+match(d:Data)-[:POSITIVI_PROV_NEL_GIORNO{value:"Catania"}]-(g:Numero)-[:PROV_POSSIEDE_POSITIVI]-(p:Provincia) 
 where d.value="2020-03-23" AND p.name="Catania"  
 return provincia,((g.value-valore_iniziale)/valore_iniziale)*100 as variazione_percentuale,d.value as data
 UNION 
-match(d:Data)-[:POSITIVI_NEL_GIORNO{value:"Bari"}]-(n:Numero)-[:POSSIEDE_POSITIVI]-(p:Provincia) 
+match(d:Data)-[:POSITIVI_PROV_NEL_GIORNO{value:"Bari"}]-(n:Numero)-[:PROV_POSSIEDE_POSITIVI]-(p:Provincia) 
 where d.value="2020-02-24" AND p.name="Bari" 
 with n.value as valore_iniziale,p.name as provincia 
-match(d:Data)-[:POSITIVI_NEL_GIORNO{value:"Bari"}]-(g:Numero)-[:POSSIEDE_POSITIVI]-(p:Provincia) 
+match(d:Data)-[:POSITIVI_PROV_NEL_GIORNO{value:"Bari"}]-(g:Numero)-[:PROV_POSSIEDE_POSITIVI]-(p:Provincia) 
 where d.value="2020-03-07" AND p.name=provincia  
 return provincia,((g.value-valore_iniziale)/1)*100 as variazione_percentuale,d.value as data 
 UNION 
-match(d:Data)-[:POSITIVI_NEL_GIORNO{value:"Bari"}]-(n:Numero)-[:POSSIEDE_POSITIVI]-(p:Provincia) 
+match(d:Data)-[:POSITIVI_PROV_NEL_GIORNO{value:"Bari"}]-(n:Numero)-[:PROV_POSSIEDE_POSITIVI]-(p:Provincia) 
 where d.value="2020-03-08" AND p.name="Bari" 
 with n.value as valore_iniziale,p.name as provincia 
-match(d:Data)-[:POSITIVI_NEL_GIORNO{value:"Bari"}]-(g:Numero)-[:POSSIEDE_POSITIVI]-(p:Provincia) 
+match(d:Data)-[:POSITIVI_PROV_NEL_GIORNO{value:"Bari"}]-(g:Numero)-[:PROV_POSSIEDE_POSITIVI]-(p:Provincia) 
 where d.value="2020-03-23" AND p.name="Bari"  
 return provincia,((g.value-valore_iniziale)/valore_iniziale)*100 as variazione_percentuale,d.value as data
 UNION 
-match(d:Data)-[:POSITIVI_NEL_GIORNO{value:"Vibo Valentia"}]-(n:Numero)-[:POSSIEDE_POSITIVI]-(p:Provincia) 
+match(d:Data)-[:POSITIVI_PROV_NEL_GIORNO{value:"Vibo Valentia"}]-(n:Numero)-[:PROV_POSSIEDE_POSITIVI]-(p:Provincia) 
 where d.value="2020-02-24" AND p.name="Vibo Valentia" 
 with n.value as valore_iniziale,p.name as provincia 
-match(d:Data)-[:POSITIVI_NEL_GIORNO{value:"Vibo Valentia"}]-(g:Numero)-[:POSSIEDE_POSITIVI]-(p:Provincia) 
+match(d:Data)-[:POSITIVI_PROV_NEL_GIORNO{value:"Vibo Valentia"}]-(g:Numero)-[:PROV_POSSIEDE_POSITIVI]-(p:Provincia) 
 where d.value="2020-03-07" AND p.name=provincia  
 return provincia,((g.value-valore_iniziale)/1)*100 as variazione_percentuale,d.value as data 
 UNION 
-match(d:Data)-[:POSITIVI_NEL_GIORNO{value:"Vibo Valentia"}]-(n:Numero)-[:POSSIEDE_POSITIVI]-(p:Provincia) 
+match(d:Data)-[:POSITIVI_PROV_NEL_GIORNO{value:"Vibo Valentia"}]-(n:Numero)-[:PROV_POSSIEDE_POSITIVI]-(p:Provincia) 
 where d.value="2020-03-08" AND p.name="Vibo Valentia" 
 with n.value as valore_iniziale,p.name as provincia 
-match(d:Data)-[:POSITIVI_NEL_GIORNO{value:"Vibo Valentia"}]-(g:Numero)-[:POSSIEDE_POSITIVI]-(p:Provincia) 
+match(d:Data)-[:POSITIVI_PROV_NEL_GIORNO{value:"Vibo Valentia"}]-(g:Numero)-[:PROV_POSSIEDE_POSITIVI]-(p:Provincia) 
 where d.value="2020-03-23" AND p.name="Vibo Valentia"  
 return provincia,((g.value-valore_iniziale)/1)*100 as variazione_percentuale,d.value as data
 
 
---> 47 ms
+--> 22 ms
+
+
+// media pesata tamponi
+match (r:Regione)-[:HA_EFFETTUATO_TAMPONI]-(p:Numero)-[:TAMPONE_NEL_GIORNO{value:r.name}]-(d:Data) 
+where d.value='2020-04-28' 
+with p.value as tamponi,r 
+match (r:Regione)-[:REG_POSSIEDE_POSITIVI]-(n:Numero)-[:POSITIVI_REG_NEL_GIORNO{value:r.name}]-(e:Data) 
+where e.value='2020-05-03'  
+return sum(tamponi*n.value)/sum(n.value) as media_pesata,e.value as data  
+UNION 
+match (r:Regione)-[:HA_EFFETTUATO_TAMPONI]-(p: Numero)-[:TAMPONE_NEL_GIORNO{value:r.name}]-(d:Data) 
+where d.value='2020-04-28' 
+with p.value as tamponi_fase1,r,d 
+match (r:Regione)-[:REG_POSSIEDE_POSITIVI]-(n: Numero)-[:POSITIVI_REG_NEL_GIORNO{value:r.name}]-(e:Data) 
+where e.value='2020-05-03' 
+with tamponi_fase1,n.value as positivi_fase1,d,r 
+match (r:Regione)-[:HA_EFFETTUATO_TAMPONI]-(g:Numero)-[:TAMPONE_NEL_GIORNO{value:r.name}]-(w:Data) 
+where w.value='2020-06-13' 
+with g.value-tamponi_fase1 as tamponi,r,positivi_fase1 
+match (r:Regione)-[:REG_POSSIEDE_POSITIVI]-(l:Numero)-[:POSITIVI_REG_NEL_GIORNO{value:r.name}]-(k:Data) 
+where k.value='2020-06-15' 
+with (l.value-positivi_fase1) as positivi_fase2,tamponi,r,k.value as data 
+return sum(tamponi*positivi_fase2)/sum(positivi_fase2) as media_pesata,data
+
+--> 63 ms
