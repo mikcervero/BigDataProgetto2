@@ -6,6 +6,8 @@ select from (select expand(path) from (select shortestPath($from, $to,'Both','Co
 
 select from (select name, max(a) as total from (select name, out("Possiede").totale_casi as a from Provincia unwind a ) group by name) order by total desc limit 5 //GIUSTA
 
+select from (select name, max(a) as tamponi, max(b) as casi from (select expand($c) let $a = (select name, out("Ha_effettuato_tamponi").tamponi as a from Regione unwind a), $b = (select name, out("PossiedeCasiRegione").totale_casi as b from Regione unwind b), $c = unionall($a,$b)) group by name) order by tamponi desc limit 5 //
+
 select d.in("Ha").name,d.deceduti from (select in("alGiornoDeceduti") as d from Data where data="2020-05-03 00:00:00"  unwind d)
 select from (select d.out("alGiornoDeceduti").data from (select name as n, out("Ha") as d from Regione unwind d)) where data="2020-05-03 00:00:00"
 select from (select d.out("alGiornoDeceduti").data as f, n,d.deceduti from (select name as n, out("Ha") as d from Regione unwind d) unwind f) where f = "2020-05-03 00:00:00"
@@ -13,7 +15,10 @@ select from (select d.out("alGiornoDeceduti").data as f, n,d.deceduti from (sele
 select n,f,max(r) from (select d.out("alGiornoDeceduti").data as f, n,d.deceduti as r from (select name as n, out("Ha") as d from Regione unwind d) unwind f) where f = "2020-05-04 00:00:00" group by n 
 
 
+select min(deceduti), min(positivi), nregione, data from (select expand($c) let $a = (match {class:Regione, as:r} -Ha-> {class:Deceduto, as:d} .outE("alGiornoDeceduti"){where:(name=$matched.r.name)}.inV() {class:Data, as:dd, where:(data="2020-05-03 00:00:00")} return distinct r.name as nregione,d.deceduti as deceduti,dd.data as data), $b = (match {class:Regione, as:r} -PossiedeCasiRegione-> {class:Caso, as:c} .outE("alGiornoCasi"){where:(name=$matched.r.name)}.inV() {class:Data, as:dd, where:(data="2020-05-03 00:00:00")} return distinct r.name as nregione,c.totale_casi as positivi,dd.data as data), $c = unionall($a,$b)) group by nregione //GIUSTA
 
+
+select min(deceduti), min(positivi), nregione,data from ( select expand($c) let $a = ( select max(c)-min(c) as deceduti, nregione,data  from (match {class:Regione, as:r} -Ha-> {class:Deceduto, as:d} .outE("alGiornoDeceduti"){where:(name=$matched.r.name)}.inV() {class:Data, as:dd, where:(data="2020-06-14 00:00:00" or data="2020-05-03 00:00:00")} return distinct r.name as nregione,d.deceduti as c, dd.data as data ) group by nregione ), $b = (select max(positivi)-min(positivi) as positivi, nregione,data from ( match {class:Regione, as:r} -PossiedeCasiRegione-> {class:Caso, as:c} .outE("alGiornoCasi"){where:(name=$matched.r.name)}.inV() {class:Data, as:dd, where:(data="2020-06-14 00:00:00" or data="2020-05-03 00:00:00")} return distinct r.name as nregione,c.totale_casi as positivi, dd.data as data) group by nregione) , $c = unionall($a,$b)) group by nregione //GIUSTA
 
 
 match {class:Regione, as:r} -Ha-> {class:Deceduto, as:d} .outE("alGiornoDeceduti"){where:(name=$matched.r.name)}.inV() {class:Data, as:dd, where:(data="2020-05-03 00:00:00")} return distinct r.name,d.deceduti,dd.data //GIUSTA
