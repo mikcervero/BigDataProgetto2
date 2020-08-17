@@ -2,5 +2,6 @@ cut -d, -f1,4,5,6,7,8,9,10,11,13,14,15,18,19 /Applications/GitHub/BigDataProgett
 
 sostituzione ; with ,
 
+cut -d, -f1,3,5,6,7,8,9 dpc-covid19-ita-province-original.csv  > dpc-covid19-ita-provin.csv
 
-awk -F, '{ if($6 != "In fase di definizione/aggiornamento") print $0;}' dpc-covid19-ita-province-20200224.csv > nuovo.csv //Eliminari righe
+awk -F, '{ if($3 != "In fase di definizione/aggiornamento") print $0;}' dpc-covid19-ita-province-20200224.csv > nuovo.csv //Eliminari righe
