@@ -35,31 +35,31 @@ MERGE (provincia)-[:PROVINCIA_DI]->(regione)
 
 -->  8 ms
 
-LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-province.csv" AS csvLine
+LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-ita-province.csv" AS csvLine
 MATCH (provincia:Provincia { name: csvLine.denominazione_provincia })
 SET provincia.sigla = csvLine.sigla_provincia,provincia.latidudine = csvLine.lat,provincia.longitudine = csvLine.long
 
 -->  123 ms
 
-LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-province.csv" AS csvLine 
+LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-ita-province.csv" AS csvLine 
 MERGE (data:Data {value: csvLine.data })
 
 --> 72 ms
 
-LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-province.csv" AS csvLine 
+LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-ita-province.csv" AS csvLine 
 MERGE (numero:Numero {value: toInteger(csvLine.totale_casi)})
 
 -->  396 ms
 
 
-LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-province.csv" AS csvLine
+LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-ita-province.csv" AS csvLine
 MATCH (provincia:Provincia {name: csvLine.denominazione_provincia}),(numero:Numero {value: toInteger(csvLine.totale_casi)})
 MERGE (provincia)-[:PROV_POSSIEDE_POSITIVI]->(numero)
 
 -->  365 ms
 
 
-LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-province.csv" AS csvLine
+LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-ita-province.csv" AS csvLine
 MATCH (data:Data {value:csvLine.data}),(numero:Numero {value: toInteger(csvLine.totale_casi)}),(provincia:Provincia{name:csvLine.denominazione_provincia})
 MERGE (numero)-[:POSITIVI_PROV_NEL_GIORNO{value:provincia.name}]->(data)
 
@@ -81,6 +81,12 @@ LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-regioni.csv" AS csvLine
 MERGE (numero:Numero {value: toInteger(csvLine.totale_casi)})
 
 -->  61 ms
+
+LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-regioni.csv" AS csvLine 
+MERGE (numero:Numero {value: toInteger(csvLine.deceduti)})
+
+--> 35 ms
+
 
 LOAD CSV WITH HEADERS FROM "file:///dpc-covid19-regioni.csv" AS csvLine 
 MERGE (numero:Numero {value: toInteger(csvLine.tamponi)})
@@ -208,7 +214,7 @@ RETURN start.name as start, end.name as end,nodeCount,totalCost
 
 -->  6231 ms
 
-match (n:Numero)-[:HA_EFFETTUATO_TAMPONI]-(r:Regione) with r,max(n.value) as mxt match (n:Numero)-[:POSSIEDE_POSITIVI]-(r:Regione) with r,max(n.value) as mx, mxt  return r.name as regione , mx as positivi,mxt as tamponi order by mx DESC Limit 5
+match (n:Numero)-[:HA_EFFETTUATO_TAMPONI]-(r:Regione) with r,max(n.value) as mxt match (n:Numero)-[:REG_POSSIEDE_POSITIVI]-(r:Regione) with r,max(n.value) as mx, mxt  return r.name as regione , mx as positivi,mxt as tamponi order by mx DESC Limit 5
 
 -->  15 ms
 
@@ -232,7 +238,7 @@ with r,valore_fase2,p.value as positivi_fase1
 match (r:Regione)-[:REG_POSSIEDE_POSITIVI]-(n:Numero)-[:POSITIVI_REG_NEL_GIORNO{value:r.name}]-(d:Data)
 where d.value='2020-06-15'
 with r,valore_fase2,n.value-positivi_fase1 as positivi_fase2,d.value as data
-return r.name as regione,positivi_fase2 as positivi_totali_fase,valore_fase2 as deceduti_totali_fase2,data 
+return r.name as regione,positivi_fase2 as positivi_totali_fase2,valore_fase2 as deceduti_totali_fase2,data 
 order by deceduti_totali_fase2 DESC
 
 -->  56 ms
