@@ -214,7 +214,7 @@ RETURN start.name as start, end.name as end,nodeCount,totalCost
 
 -->  6231 ms
 
-match (n:Numero)-[:HA_EFFETTUATO_TAMPONI]-(r:Regione) with r,max(n.value) as mxt match (n:Numero)-[:REG_POSSIEDE_POSITIVI]-(r:Regione) with r,max(n.value) as mx, mxt  return r.name as regione , mx as positivi,mxt as tamponi order by mx DESC Limit 5
+match (n:Numero)-[:HA_EFFETTUATO_TAMPONI]-(r:Regione) with r,max(n.value) as mxt match (n:Numero)-[:REG_POSSIEDE_POSITIVI]-(r:Regione) with r,max(n.value) as mx, mxt  return r.name as regione , mx as positivi,mxt as tamponi order by mxt DESC Limit 5
 
 -->  15 ms
 
