@@ -49,7 +49,7 @@
   },
   {
     "name": "Lombardia",
-    "neighbors": ["Piemonte", "Trentino-Alto Adige", "Veneto","Emilia-Romagna"]
+    "neighbors": ["Piemonte", "P.A. Trento", "P.A. Bolzano", "Veneto","Emilia-Romagna"]
   },
   {
     "name": "Piemonte",
@@ -57,7 +57,7 @@
   },
   {
     "name": "Veneto",
-    "neighbors": ["Friuli Venezia Giulia","Trentino-Alto Adige","Emilia-Romagna","Lombardia"]
+    "neighbors": ["Friuli Venezia Giulia","P.A. Trento","P.A. Bolzano", "Emilia-Romagna","Lombardia"]
   },
   {
     "name": "P.A. Bolzano",
