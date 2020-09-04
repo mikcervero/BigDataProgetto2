@@ -3,7 +3,7 @@
     "log": "debug"
   },
   "source" : {
-    "file": { "path": "/home/fabiano/regioni.json" }
+    "file": { "path": "/home/path/regioni.json" }
   },
   "extractor" : {
     "json": {}
@@ -20,7 +20,7 @@
   ],
   "loader" : {
     "orientdb": {
-      "dbURL": "plocal:/home/fabiano/orientdb-3.1.0/databases/BigData",
+      "dbURL": "plocal:/home/path/orientdb-3.1.0/databases/BigData",
       "dbUser": "admin",
       "dbPassword": "admin",
       "dbAutoDropIfExists": true,

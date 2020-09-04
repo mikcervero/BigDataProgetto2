@@ -1,7 +1,7 @@
 {
   "config": {
     "log": "debug"},
-  "source": { "file": { "path": "/home/fabiano/dpc-covid19-ita-regioni.csv" } },
+  "source": { "file": { "path": "/home/path/dpc-covid19-ita-regioni.csv" } },
   "extractor": { "csv": {} },
   "transformers": [
 	 { "merge": { "joinFieldName": "totale_casi", "lookup": "Caso.totale_casi" } },		 
@@ -15,7 +15,7 @@
   ],
   "loader": {
     "orientdb": {
-        "dbURL": "plocal:/home/fabiano/orientdb-3.1.0/databases/BigData",
+        "dbURL": "plocal:/home/path/orientdb-3.1.0/databases/BigData",
         "dbUser": "admin",
          "dbPassword": "admin",
 	 "dbAutoDropIfExists": false,

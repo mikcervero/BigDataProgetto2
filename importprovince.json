@@ -3,7 +3,7 @@
     "log": "debug"
   },
   "source" : {
-    "file": { "path": "/home/fabiano/province.json" }
+    "file": { "path": "/home/path/province.json" }
   },
   "extractor" : {
     "json": {}
@@ -26,7 +26,7 @@
   ],
   "loader" : {
     "orientdb": {
-      "dbURL": "plocal:/home/fabiano/orientdb-3.1.0/databases/BigData",
+      "dbURL": "plocal:/home/path/orientdb-3.1.0/databases/BigData",
       "dbUser": "admin",
       "dbPassword": "admin",
       "dbAutoDropIfExists": false,
