@@ -1,7 +1,7 @@
 {
   "config": {
     "log": "debug"},
-  "source": { "file": { "path": "/home/path/dpc-covid19-ita-regioni.csv" } },
+  "source": { "file": { "path": "/home/path/dpc-covid19-regioni.csv" } },
   "extractor": { "csv": {} },
   "transformers": [
 	{ "merge": { "joinFieldName": "deceduti", "lookup": "Deceduto.deceduti" } },	 
